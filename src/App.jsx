@@ -1,842 +1,249 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useEffect, useRef, useState } from 'react'
+import { projects, stages, capabilities, referenceProjects, agentReferences } from './content'
+import { parseHash, parseLocation, hrefFor, routeTitle } from './navigation'
+import InteractionLab from './components/InteractionLab'
+import SiteEffects from './components/SiteEffects'
+import VideoCapability, { VideoCapabilityEntry } from './components/VideoCapability'
 
-gsap.registerPlugin(ScrollTrigger)
-ScrollTrigger.config({ ignoreMobileResize: true, limitCallbacks: true })
+const EMAIL = 'wuzibx@foxmail.com'
+const RESUME = '/谢文炳_AI项目经理_优化简历.pdf'
 
-const HERO_VIDEO_URL =
-  'https://videos.pexels.com/video-files/3163534/3163534-hd_1920_1080_30fps.mp4'
-const HERO_POSTER_URL =
-  'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=1600&q=72'
-
-const responsiveImage = (baseUrl, width, quality = 74) =>
-  `${baseUrl}?auto=format&fit=crop&w=${width}&q=${quality}`
-
-const projects = [
-  {
-    number: '01',
-    title: 'AI SHORT DRAMA',
-    subtitle: 'AI 短剧账号从 0 到 1 搭建与运营',
-    tags: ['PROJECT PLANNING', 'AIGC WORKFLOW', 'PERSONAL PROJECT'],
-    image: 'https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead',
-    position: 'center',
-  },
-  {
-    number: '02',
-    title: 'COMFYUI PIPELINE',
-    subtitle: '本地部署与生成式内容工作流搭建',
-    tags: ['COMFYUI', 'TXT-TO-IMAGE', 'IMG-TO-VIDEO'],
-    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f',
-    position: 'center',
-  },
-  {
-    number: '03',
-    title: 'CONTENT LOOP',
-    subtitle: '抖音 / 小红书内容运营与数据复盘',
-    tags: ['CONTENT OPS', 'DATA REVIEW', 'ITERATION'],
-    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5',
-    position: 'center',
-  },
-  {
-    number: '04',
-    title: 'ERP SIMULATION',
-    subtitle: '经营决策、资源配置与团队协作模拟',
-    tags: ['BUSINESS', 'TEAMWORK', '2025'],
-    image: 'https://images.unsplash.com/photo-1558655146-9f40138edfeb',
-    position: 'center',
-  },
-]
-
-const strengths = [
-  {
-    index: '01',
-    title: '拆清需求与计划',
-    en: 'PROJECT DELIVERY',
-    description:
-      '把模糊目标整理成项目范围、任务优先级、时间节点和明确的交付清单。',
-    list: ['需求拆解', 'WBS 排期', '交付定义'],
-  },
-  {
-    index: '02',
-    title: '搭建 AI 内容流程',
-    en: 'AI WORKFLOW',
-    description:
-      '根据内容目标选择合适工具，串联 ComfyUI、即梦与剪映，沉淀可复用流程。',
-    list: ['工具选型', 'ComfyUI', '流程模板'],
-  },
-  {
-    index: '03',
-    title: '推动内容按期交付',
-    en: 'CONTENT DELIVERY',
-    description:
-      '协调选题、脚本、画面、剪辑和发布节点，用素材清单与问题记录减少遗漏。',
-    list: ['节点跟进', '素材管理', '问题闭环'],
-  },
-  {
-    index: '04',
-    title: '用数据完成复盘',
-    en: 'DATA ITERATION',
-    description:
-      '围绕播放量、互动率和内容反馈定位问题，把复盘结论转化为下一轮行动。',
-    list: ['指标整理', '原因分析', '迭代建议'],
-  },
-]
-
-const needs = [
-  {
-    index: 'N01',
-    title: 'AI 项目只有想法，缺少落地路径',
-    description: '协助明确目标、用户、范围和交付标准，把概念整理为可执行的项目计划。',
-    output: '需求清单 / 项目计划',
-  },
-  {
-    index: 'N02',
-    title: 'AIGC 制作工具多、流程容易混乱',
-    description: '根据内容类型梳理工具链与制作节点，减少重复试错，沉淀可复用工作流。',
-    output: '工具链 / 流程模板',
-  },
-  {
-    index: 'N03',
-    title: '任务节点不清，项目容易拖延',
-    description: '拆分任务、排定里程碑并记录风险与问题，让每个阶段都有负责人和结果。',
-    output: 'WBS / 里程碑 / 问题清单',
-  },
-  {
-    index: 'N04',
-    title: '内容生产中素材与信息分散',
-    description: '统一管理脚本、画面、版本和待办事项，让协作信息更容易同步与追踪。',
-    output: '素材清单 / 协作记录',
-  },
-  {
-    index: 'N05',
-    title: '内容发布后缺少优化依据',
-    description: '整理播放量、互动率与用户反馈，通过阶段复盘找到下一轮优化方向。',
-    output: '数据复盘 / 迭代建议',
-  },
-  {
-    index: 'N06',
-    title: '需要快速验证 AI 内容方案',
-    description: '用现有生成式工具完成小范围原型与内容样本，尽快验证方向是否可行。',
-    output: '内容原型 / 验证样本',
-  },
-]
-
-function Arrow({ diagonal = false }) {
-  return (
-    <span className={diagonal ? 'arrow arrow--diagonal' : 'arrow'} aria-hidden="true">
-      →
-    </span>
-  )
+function Link({ href, ...props }) {
+  return <a {...props} href={href?.startsWith('#') ? hrefFor(href) : href} />
 }
 
-function App() {
-  const [videoPaused, setVideoPaused] = useState(false)
-  const [loadHeroVideo, setLoadHeroVideo] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [navFloating, setNavFloating] = useState(false)
-  const mainRef = useRef(null)
-  const videoRef = useRef(null)
-  const navFloatingRef = useRef(false)
-
+function Opening() {
+  const [visible, setVisible] = useState(() => {
+    if (typeof window === 'undefined' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false
+    try { return !sessionStorage.getItem('xw-intro-seen') } catch { return true }
+  })
   useEffect(() => {
-    let frameId = null
+    if (!visible) return
+    try { sessionStorage.setItem('xw-intro-seen', '1') } catch {}
+    const timer = setTimeout(() => setVisible(false), 1700)
+    const dismiss = () => setVisible(false)
+    window.addEventListener('keydown', dismiss, { once: true })
+    return () => { clearTimeout(timer); window.removeEventListener('keydown', dismiss) }
+  }, [visible])
+  return visible ? <div className="opening"><div aria-hidden="true" className="opening-content"><span className="opening-caption">XIE WENBING · PERSONAL PORTFOLIO</span><div className="opening-word">Beyond<span> boundaries.</span></div><span className="opening-line" /><span className="opening-foot">从本土洞察，走向全球可能。</span></div><button className="opening-skip" onClick={() => setVisible(false)}>跳过动画 <Arrow /></button></div> : null
+}
 
-    const updateNav = () => {
-      const secondScreenStart = Math.max(window.innerHeight - 112, 520)
-      const shouldFloat = window.scrollY >= secondScreenStart
-      if (shouldFloat !== navFloatingRef.current) {
-        navFloatingRef.current = shouldFloat
-        setNavFloating(shouldFloat)
-      }
-      frameId = null
-    }
-
-    const handleViewportChange = () => {
-      if (frameId === null) frameId = window.requestAnimationFrame(updateNav)
-    }
-
-    updateNav()
-    window.addEventListener('scroll', handleViewportChange, { passive: true })
-    window.addEventListener('resize', handleViewportChange)
-
-    return () => {
-      window.removeEventListener('scroll', handleViewportChange)
-      window.removeEventListener('resize', handleViewportChange)
-      if (frameId !== null) window.cancelAnimationFrame(frameId)
-    }
-  }, [])
-
+function Hero() {
+  const video = useRef(null)
+  const [playing, setPlaying] = useState(false)
   useEffect(() => {
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection
-    const effectiveType = connection?.effectiveType ?? ''
-    const shouldKeepPoster =
-      connection?.saveData ||
-      /(^|-)2g$/.test(effectiveType) ||
-      window.matchMedia('(max-width: 760px)').matches
-
-    if (shouldKeepPoster) return undefined
-
-    const enableVideo = () => setLoadHeroVideo(true)
-    const delayId = window.setTimeout(enableVideo, 4200)
-
-    window.addEventListener('pointerdown', enableVideo, { once: true, passive: true })
-    window.addEventListener('scroll', enableVideo, { once: true, passive: true })
-
-    return () => {
-      window.clearTimeout(delayId)
-      window.removeEventListener('pointerdown', enableVideo)
-      window.removeEventListener('scroll', enableVideo)
+    const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const sync = () => {
+      if (preference.matches) video.current?.pause()
+      else video.current?.play().catch(() => setPlaying(false))
     }
+    sync()
+    preference.addEventListener('change', sync)
+    return () => preference.removeEventListener('change', sync)
   }, [])
-
-  useEffect(() => {
-    if (!loadHeroVideo || !videoRef.current) return
-
-    const video = videoRef.current
-    video.load()
-    video.play().catch(() => setVideoPaused(true))
-  }, [loadHeroVideo])
-
-  useLayoutEffect(() => {
-    const root = mainRef.current
-    if (!root) return undefined
-
-    const motionOverride = new URLSearchParams(window.location.search).get('motion')
-    const isLocalPreview = ['localhost', '127.0.0.1'].includes(window.location.hostname)
-    const prefersReducedMotion =
-      motionOverride === 'reduce' ||
-      (window.matchMedia('(prefers-reduced-motion: reduce)').matches && !isLocalPreview && motionOverride !== 'full')
-    const opening = root.querySelector('.opening')
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection
-    const canUseParallax =
-      window.innerWidth > 760 &&
-      !connection?.saveData &&
-      (navigator.hardwareConcurrency ?? 4) >= 4
-
-    document.documentElement.dataset.motion = prefersReducedMotion ? 'reduced' : 'full'
-
-    if (prefersReducedMotion) {
-      if (opening) opening.style.display = 'none'
-      return undefined
-    }
-
-    window.history.scrollRestoration = 'manual'
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
-    document.body.classList.add('is-opening')
-
-    const context = gsap.context(() => {
-      const counter = root.querySelector('.opening__count')
-      const progress = { value: 0 }
-
-      gsap.set('.hero-title-line > span', {
-        yPercent: 125,
-        scaleX: 0.74,
-        transformOrigin: 'left center',
-      })
-      gsap.set('.hero__eyebrow, .hero__meta, .hero__footer', { y: 34, opacity: 0 })
-      gsap.set('.nav', { y: -80, opacity: 0 })
-      gsap.set('.hero__video', { scale: 1.14 })
-      gsap.set('.opening__line-fill', { scaleX: 0, transformOrigin: 'left center' })
-
-      const openingTimeline = gsap.timeline({ defaults: { ease: 'power4.inOut' } })
-      openingTimeline
-        .from('.opening__mark', { y: 30, opacity: 0, duration: 0.75 })
-        .from('.opening__label', { y: 18, opacity: 0, duration: 0.55 }, '-=0.4')
-        .to(
-          progress,
-          {
-            value: 100,
-            duration: 1.15,
-            ease: 'power2.inOut',
-            onUpdate: () => {
-              if (counter) counter.textContent = String(Math.round(progress.value)).padStart(3, '0')
-            },
-          },
-          '-=0.2',
-        )
-        .to('.opening__line-fill', { scaleX: 1, duration: 1.15, ease: 'power3.inOut' }, '<')
-        .to('.opening__content', { y: -22, opacity: 0, duration: 0.45 }, '+=0.05')
-        .to('.opening__panel--top', { yPercent: -102, duration: 1.12, ease: 'expo.inOut' }, '-=0.08')
-        .to('.opening__panel--bottom', { yPercent: 102, duration: 1.12, ease: 'expo.inOut' }, '<')
-        .set('.opening', { display: 'none' })
-        .to('.nav', { y: 0, opacity: 1, duration: 0.9, ease: 'power4.out' }, '-=0.72')
-        .to(
-          '.hero-title-line > span',
-          {
-            yPercent: 0,
-            scaleX: 1,
-            duration: 1.35,
-            stagger: 0.14,
-            ease: 'power4.out',
-          },
-          '-=0.65',
-        )
-        .to('.hero__video', { scale: 1, duration: 2.1, ease: 'power3.out' }, '-=1.45')
-        .to(
-          '.hero__eyebrow, .hero__meta, .hero__footer',
-          { y: 0, opacity: 1, duration: 0.9, stagger: 0.12, ease: 'power3.out' },
-          '-=1.15',
-        )
-        .call(() => document.body.classList.remove('is-opening'))
-
-      const aboutTimeline = gsap.timeline({
-        scrollTrigger: { trigger: '#about', start: 'top 70%', once: true },
-      })
-      aboutTimeline
-        .from('#about > .section-index', { x: -100, opacity: 0, duration: 0.9, ease: 'power4.out' })
-        .from(
-          '#about .about-heading-line > span',
-          { yPercent: 120, scaleX: 0.82, duration: 1.25, stagger: 0.12, ease: 'power4.out' },
-          '-=0.55',
-        )
-        .from('#about .about-heading-caption', { y: 42, opacity: 0, duration: 0.9 }, '-=0.8')
-        .from(
-          '#about .about__visual',
-          { clipPath: 'inset(0 0 100% 0)', scale: 1.05, duration: 1.35, ease: 'power4.inOut' },
-          '-=1.1',
-        )
-        .from('#about .about__copy > p', { y: 55, opacity: 0, duration: 0.95, stagger: 0.16 }, '-=0.65')
-        .from('#about .experience-list > div', { y: 44, opacity: 0, duration: 0.8, stagger: 0.11 }, '-=0.55')
-        .from(
-          '#about .about__details > div, #about .resume-link',
-          { y: 32, opacity: 0, duration: 0.75, stagger: 0.1 },
-          '-=0.45',
-        )
-
-      gsap.from('#about .stat', {
-        y: 90,
-        opacity: 0,
-        duration: 1.05,
-        stagger: 0.14,
-        ease: 'power4.out',
-        scrollTrigger: { trigger: '#about .stats', start: 'top 82%', once: true },
-      })
-
-      const workHeading = gsap.timeline({
-        scrollTrigger: { trigger: '#work', start: 'top 72%', once: true },
-      })
-      workHeading
-        .from('#work .section-index', { x: -110, opacity: 0, duration: 0.9, ease: 'power4.out' })
-        .from(
-          '#work .motion-heading-line > span',
-          { yPercent: 120, scaleX: 0.78, duration: 1.25, stagger: 0.12, ease: 'power4.out' },
-          '-=0.6',
-        )
-        .from('#work .motion-heading-caption, #work .section-heading > p', {
-          y: 38,
-          opacity: 0,
-          duration: 0.85,
-          stagger: 0.1,
-        }, '-=0.7')
-
-      gsap.utils.toArray('.project-card').forEach((card, index) => {
-        const media = card.querySelector('.project-card__media')
-        const image = card.querySelector('img')
-        const cover = card.querySelector('.project-card__reveal')
-        const cardTimeline = gsap.timeline({
-          delay: (index % 2) * 0.14,
-          scrollTrigger: { trigger: card, start: 'top 86%', once: true },
-        })
-        cardTimeline
-          .from(card, { y: 120, opacity: 0, duration: 1.15, ease: 'power4.out' })
-          .fromTo(
-            media,
-            { clipPath: 'inset(100% 0 0 0)' },
-            { clipPath: 'inset(0% 0 0 0)', duration: 1.3, ease: 'power4.inOut' },
-            0.05,
-          )
-          .fromTo(image, { scale: 1.18 }, { scale: 1, duration: 1.75, ease: 'power3.out' }, 0.08)
-          .to(cover, { scaleY: 0, duration: 1.05, transformOrigin: 'top center', ease: 'power4.inOut' }, 0.18)
-          .from(
-            card.querySelector('.project-card__info'),
-            { y: 36, opacity: 0, duration: 0.8, ease: 'power3.out' },
-            '-=0.7',
-          )
-
-        if (canUseParallax) {
-          gsap.fromTo(
-            image,
-            { yPercent: -5 },
-            {
-              yPercent: 5,
-              ease: 'none',
-              scrollTrigger: { trigger: card, start: 'top bottom', end: 'bottom top', scrub: 1.1 },
-            },
-          )
-        }
-      })
-
-      const capabilityHeading = gsap.timeline({
-        scrollTrigger: { trigger: '#services', start: 'top 72%', once: true },
-      })
-      capabilityHeading
-        .from('#services > .section-heading .section-index', {
-          x: -110,
-          opacity: 0,
-          duration: 0.9,
-          ease: 'power4.out',
-        })
-        .from(
-          '#services > .section-heading .motion-heading-line > span',
-          { yPercent: 125, scaleX: 0.78, duration: 1.3, stagger: 0.12, ease: 'power4.out' },
-          '-=0.6',
-        )
-        .from('#services > .section-heading .motion-heading-caption', {
-          y: 40,
-          opacity: 0,
-          duration: 0.85,
-        }, '-=0.75')
-
-      gsap.utils.toArray('.capability-card').forEach((card, index) => {
-        gsap.from(card, {
-          y: 130,
-          opacity: 0,
-          rotateX: 7,
-          transformPerspective: 1000,
-          duration: 1.2,
-          delay: (index % 4) * 0.13,
-          ease: 'power4.out',
-          scrollTrigger: { trigger: card, start: 'top 88%', once: true },
-        })
-      })
-
-      const needsTimeline = gsap.timeline({
-        scrollTrigger: { trigger: '.needs', start: 'top 76%', once: true },
-      })
-      needsTimeline
-        .from('.needs .section-index, .needs .kicker', {
-          x: -90,
-          opacity: 0,
-          duration: 0.85,
-          stagger: 0.1,
-          ease: 'power4.out',
-        })
-        .from(
-          '.needs-heading-line > span',
-          { yPercent: 120, scaleX: 0.8, duration: 1.2, stagger: 0.12, ease: 'power4.out' },
-          '-=0.55',
-        )
-        .from('.needs-heading-caption, .needs__heading > div:last-child > p', {
-          y: 38,
-          opacity: 0,
-          duration: 0.85,
-          stagger: 0.1,
-        }, '-=0.7')
-
-      gsap.utils.toArray('.need-card').forEach((card, index) => {
-        gsap.from(card, {
-          y: 115,
-          opacity: 0,
-          duration: 1.1,
-          delay: (index % 3) * 0.13,
-          ease: 'power4.out',
-          scrollTrigger: { trigger: card, start: 'top 88%', once: true },
-        })
-      })
-
-      const contactTimeline = gsap.timeline({
-        scrollTrigger: { trigger: '#contact', start: 'top 65%', once: true },
-      })
-      contactTimeline
-        .from('#contact .contact__eyebrow', { y: 40, opacity: 0, duration: 0.85 })
-        .from(
-          '#contact .contact-title-line > span',
-          { yPercent: 125, scaleX: 0.76, duration: 1.3, stagger: 0.14, ease: 'power4.out' },
-          '-=0.5',
-        )
-        .from('#contact .contact__email', { y: 42, opacity: 0, duration: 0.9 }, '-=0.7')
-        .from('#contact .footer > *', { y: 28, opacity: 0, duration: 0.7, stagger: 0.09 }, '-=0.45')
-
-      if (canUseParallax) {
-        gsap.to('#about .portrait-core', {
-          yPercent: 10,
-          ease: 'none',
-          scrollTrigger: { trigger: '#about .about__visual', start: 'top bottom', end: 'bottom top', scrub: 1.2 },
-        })
-        gsap.to('.contact__glow', {
-          yPercent: -12,
-          scale: 1.08,
-          ease: 'none',
-          scrollTrigger: { trigger: '#contact', start: 'top bottom', end: 'bottom top', scrub: 1.4 },
-        })
-      }
-    }, root)
-
-    let refreshFrame = null
-    const refresh = () => {
-      if (refreshFrame !== null) window.cancelAnimationFrame(refreshFrame)
-      refreshFrame = window.requestAnimationFrame(() => {
-        ScrollTrigger.refresh()
-        refreshFrame = null
-      })
-    }
-    window.addEventListener('load', refresh, { once: true })
-    document.fonts?.ready.then(refresh)
-
-    return () => {
-      document.body.classList.remove('is-opening')
-      window.removeEventListener('load', refresh)
-      if (refreshFrame !== null) window.cancelAnimationFrame(refreshFrame)
-      context.revert()
-    }
-  }, [])
-
   const toggleVideo = () => {
-    const video = videoRef.current
-    if (!video) return
-
-    if (!loadHeroVideo) {
-      setLoadHeroVideo(true)
-      setVideoPaused(false)
-      return
-    }
-
-    if (video.paused) {
-      video
-        .play()
-        .then(() => setVideoPaused(false))
-        .catch(() => setVideoPaused(true))
-    } else {
-      video.pause()
-      setVideoPaused(true)
-    }
+    if (video.current?.paused) video.current.play().catch(() => setPlaying(false))
+    else video.current?.pause()
   }
-
-  const closeMenu = () => setMenuOpen(false)
-
-  return (
-    <main ref={mainRef}>
-      <div className="opening" aria-hidden="true">
-        <div className="opening__panel opening__panel--top" />
-        <div className="opening__panel opening__panel--bottom" />
-        <div className="opening__content">
-          <div className="opening__meta">
-            <span className="opening__mark">XWB®</span>
-            <span className="opening__label">AI PROJECT PORTFOLIO · 2026</span>
-          </div>
-          <div className="opening__progress">
-            <div className="opening__line"><span className="opening__line-fill" /></div>
-            <span className="opening__count">000</span>
-          </div>
-        </div>
+  return <section className="hero" id="top" aria-labelledby="hero-title">
+    <img className="hero-image" src="/images/hero-harbor.png" width="1672" height="941" alt="" fetchPriority="high" />
+    <video ref={video} className="hero-video" src="/videos/hero-harbor.mp4" poster="/images/hero-harbor.png" muted loop playsInline preload="metadata" aria-hidden="true" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} />
+    <div className="hero-shade" />
+    <div className="shell hero-inner">
+      <div className="hero-topline"><span>INDEPENDENT THINKING. GLOBAL PERSPECTIVE.</span><span>个人作品与方法 / PORTFOLIO</span></div>
+      <div className="hero-composition">
+        <div className="hero-copy"><p className="hero-kicker"><span />产业出海 · AI 内容 · 项目交付</p><h1 id="hero-title">让价值，<br /><span>跨越边界。</span></h1><p className="hero-intro">我是谢文炳。我能将内容策划、AI 视频制作与项目方法<br className="desktop-break" />连接成清晰的出海工作路径。</p><div className="hero-actions"><Link className="button button-light" href="#projects">探索我的实践 <Arrow diagonal /></Link><Link className="hero-text-link" href="#/case/video-production">AI 视频制作能力 <Arrow /></Link></div></div>
+        <div className="hero-signature" aria-hidden="true"><span className="hero-orbit-label">A WIDER PERSPECTIVE</span><span className="hero-script">Beyond<br /><em>boundaries.</em></span><span className="hero-art-caption">LOCAL INSIGHT — GLOBAL AMBITION</span></div>
       </div>
-
-      <header className={navFloating ? 'nav shell nav--floating' : 'nav shell'}>
-        <a className="brand" href="#top" aria-label="返回首页">
-          XWB<span>®</span>
-        </a>
-
-        <button
-          className="nav__toggle"
-          type="button"
-          aria-label="打开导航"
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          <span />
-          <span />
-        </button>
-
-        <nav className={menuOpen ? 'nav__links is-open' : 'nav__links'} aria-label="主要导航">
-          <a href="#about" onClick={closeMenu}>ABOUT</a>
-          <a href="#work" onClick={closeMenu}>PROJECTS</a>
-          <a href="#services" onClick={closeMenu}>CAPABILITY</a>
-        </nav>
-
-        <a className="pill pill--light nav__contact" href="mailto:wuzibx@foxmail.com">
-          LET&apos;S TALK <Arrow diagonal />
-        </a>
-      </header>
-
-      <section className="hero" id="top">
-        <video
-          className="hero__video"
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="none"
-          poster={HERO_POSTER_URL}
-          aria-label="抽象数字光影动态背景"
-        >
-          {loadHeroVideo && <source src={HERO_VIDEO_URL} type="video/mp4" />}
-        </video>
-        <div className="hero__wash" />
-        <div className="hero__grid" />
-
-        <div className="hero__content shell">
-          <div className="hero__eyebrow">
-            <span className="status-dot" />
-            AI PROJECT MANAGER CANDIDATE · CHANGSHA
-          </div>
-          <h1>
-            <span className="hero-title-line"><span>TURNING AI</span></span>
-            <span className="hero-title-line hero__title-shift"><span>INTO ACTION.</span></span>
-          </h1>
-          <div className="hero__meta">
-            <p>AI 项目管理 / AIGC 内容 / 项目运营</p>
-            <p className="hero__intro">
-              把模糊目标拆成清晰任务，<br />
-              连接 AI 工具、内容与真实交付。
-            </p>
-          </div>
-        </div>
-
-        <div className="hero__footer shell">
-          <span>AI PROJECT PORTFOLIO · 2026</span>
-          <a href="#about" className="scroll-cue">
-            SCROLL TO EXPLORE <span aria-hidden="true">↓</span>
-          </a>
-          <button className="video-control" type="button" onClick={toggleVideo}>
-            <span className={!loadHeroVideo || videoPaused ? 'play-icon' : 'pause-icon'} aria-hidden="true" />
-            {!loadHeroVideo ? 'LOAD FILM' : videoPaused ? 'PLAY FILM' : 'PAUSE FILM'}
-          </button>
-        </div>
-      </section>
-
-      <section className="about section shell" id="about">
-        <div className="section-index">01 / ABOUT</div>
-        <div className="about__layout" data-reveal>
-          <div className="about__visual" aria-label="谢文炳个人身份视觉">
-            <div className="portrait-orbit portrait-orbit--one" />
-            <div className="portrait-orbit portrait-orbit--two" />
-            <div className="portrait-core">
-              <span>XIE WENBING</span>
-              <strong>AI PM</strong>
-              <small>FROM GOAL TO DELIVERY</small>
-            </div>
-            <span className="about__visual-label">PROJECT MINDSET / 2026</span>
-          </div>
-
-          <div className="about__content">
-            <p className="kicker">ABOUT XIE WENBING</p>
-            <h2 className="motion-heading about-motion-heading">
-              <span className="about-heading-line"><span>FROM IDEA</span></span>
-              <span className="about-heading-line"><span>TO DELIVERY.</span></span>
-              <small className="about-heading-caption">
-                连接业务目标与 AI 执行，把想法推进为可交付的结果。
-              </small>
-            </h2>
-            <div className="about__copy">
-              <p>
-                工商管理本科，具备 AI 内容项目从 0 到 1 的独立执行经验。围绕 AI 短剧账号，
-                完成定位与选题、脚本拆解、生成式制作、发布运营和数据复盘。
-              </p>
-              <p>
-                熟悉 ComfyUI 本地部署与节点工作流，并能结合即梦、剪映、Photoshop 等工具推进内容交付。
-                希望从 AI 内容项目和 AI 应用项目切入项目管理岗位。
-              </p>
-            </div>
-
-            <div className="experience-list">
-              <div>
-                <span>2025 — NOW</span>
-                <p><strong>AI 内容项目实践</strong><small>AI 短剧账号 0-1 搭建、工作流与运营复盘</small></p>
-              </div>
-              <div>
-                <span>2024 — 2025</span>
-                <p><strong>学生会 · 实习干事</strong><small>校园活动策划、执行与协同</small></p>
-              </div>
-              <div>
-                <span>2026</span>
-                <p><strong>湖南涉外经济学院</strong><small>工商管理本科 · 预计 2026.06 毕业</small></p>
-              </div>
-            </div>
-
-            <div className="about__details">
-              <div>
-                <span>BASED IN</span>
-                <strong>CHANGSHA / CHINA</strong>
-              </div>
-              <div>
-                <span>CONTACT</span>
-                <a href="mailto:wuzibx@foxmail.com">WUZIBX@FOXMAIL.COM</a>
-              </div>
-              <div>
-                <span>FOCUS</span>
-                <strong>AI CONTENT · PROJECT DELIVERY</strong>
-              </div>
-            </div>
-
-            <a className="resume-link" href="/谢文炳_AI项目经理_优化简历.pdf" download>
-              DOWNLOAD RESUME <Arrow />
-            </a>
-          </div>
-        </div>
-
-        <div className="stats" data-reveal>
-          <div className="stat">
-            <strong>01</strong>
-            <span>从 0 到 1 AI 内容项目</span>
-          </div>
-          <div className="stat">
-            <strong>07</strong>
-            <span>端到端制作节点</span>
-          </div>
-          <div className="stat">
-            <strong>02</strong>
-            <span>重点内容平台</span>
-          </div>
-          <div className="stat stat--accent">
-            <span className="status-dot" />
-            <p>OPEN FOR<br />AI PROJECT ROLES</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="work section" id="work">
-        <div className="shell">
-          <div className="section-heading" data-reveal>
-            <div className="section-index">02 / PROJECT PRACTICE</div>
-            <h2 className="motion-heading">
-              <span className="motion-heading-line"><span>PROJECT</span></span>
-              <span className="motion-heading-line"><span>PRACTICE</span></span>
-              <small className="motion-heading-caption">项目实践</small>
-            </h2>
-            <p>把 AI 工具、内容生产和项目推进连接起来的阶段性实践。</p>
-          </div>
-
-          <div className="project-list">
-            {projects.map((project) => (
-              <article className="project-card" key={project.number} data-reveal>
-                <a href="#contact" aria-label={`了解 ${project.title} 项目`}>
-                  <div className="project-card__media">
-                    <img
-                      src={responsiveImage(project.image, 1120)}
-                      srcSet={`${responsiveImage(project.image, 640, 70)} 640w, ${responsiveImage(project.image, 960, 72)} 960w, ${responsiveImage(project.image, 1400)} 1400w`}
-                      sizes="(max-width: 760px) calc(100vw - 36px), (max-width: 1180px) calc(50vw - 42px), 820px"
-                      alt={`${project.title} 项目视觉图`}
-                      style={{ objectPosition: project.position }}
-                      loading="lazy"
-                      decoding="async"
-                      fetchPriority="low"
-                    />
-                    <div className="project-card__reveal" />
-                    <div className="project-card__shade" />
-                    <span className="project-card__number">{project.number}</span>
-                    <span className="project-card__open"><Arrow diagonal /></span>
-                  </div>
-                  <div className="project-card__info">
-                    <div>
-                      <h3>{project.title}</h3>
-                      <p>{project.subtitle}</p>
-                    </div>
-                    <ul>
-                      {project.tags.map((tag) => <li key={tag}>{tag}</li>)}
-                    </ul>
-                  </div>
-                </a>
-              </article>
-            ))}
-          </div>
-
-          <div className="work__footer" data-reveal>
-            <p>完整项目过程与内容样本可在面试中展示</p>
-            <a className="text-link" href="mailto:wuzibx@foxmail.com">
-              DISCUSS A PROJECT <Arrow />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section className="capabilities section shell" id="services">
-        <div className="section-heading section-heading--wide" data-reveal>
-          <div className="section-index">03 / WHAT I CAN DO</div>
-          <h2 className="motion-heading">
-            <span className="motion-heading-line"><span>WHAT I</span></span>
-            <span className="motion-heading-line"><span>CAN DO</span></span>
-            <small className="motion-heading-caption">我能做的 · 从目标到交付</small>
-          </h2>
-        </div>
-
-        <div className="capability-grid">
-          {strengths.map((item) => (
-            <article className="capability-card" key={item.index} data-reveal>
-              <div className="capability-card__top">
-                <span>{item.index}</span>
-                <span className="capability-card__mark">✦</span>
-              </div>
-              <div>
-                <p className="kicker">{item.en}</p>
-                <h3>{item.title}</h3>
-                <p className="capability-card__description">{item.description}</p>
-              </div>
-              <ul>
-                {item.list.map((label) => <li key={label}>{label}</li>)}
-              </ul>
-            </article>
-          ))}
-        </div>
-
-        <div className="needs" data-reveal>
-          <div className="needs__heading">
-            <div>
-              <div className="section-index">04 / NEEDS I CAN SOLVE</div>
-              <p className="kicker">FOR AI CONTENT & APPLICATION PROJECTS</p>
-            </div>
-            <div>
-              <h3 className="needs-motion-heading">
-                <span className="needs-heading-line"><span>NEEDS</span></span>
-                <span className="needs-heading-line"><span>I SOLVE</span></span>
-                <small className="needs-heading-caption">可以解决的需求</small>
-              </h3>
-              <p>
-                适合初级 AI 内容与 AI 应用项目场景：从需求梳理、工作流搭建到交付和复盘，
-                让项目推进过程更清晰。
-              </p>
-            </div>
-          </div>
-
-          <div className="needs__grid">
-            {needs.map((need) => (
-              <article className="need-card" key={need.index}>
-                <div className="need-card__top">
-                  <span>{need.index}</span>
-                  <span aria-hidden="true">↘</span>
-                </div>
-                <div>
-                  <h4>{need.title}</h4>
-                  <p>{need.description}</p>
-                </div>
-                <small>OUTPUT · {need.output}</small>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="contact" id="contact">
-        <div className="contact__glow" />
-        <div className="contact__grid" />
-        <div className="contact__content shell" data-reveal>
-          <div className="contact__eyebrow">
-            <span className="status-dot" />
-            READY TO BUILD WITH AI?
-          </div>
-          <h2>
-            <span className="contact-title-line contact-title-line--solid"><span>TURN AI</span></span>
-            <span className="contact-title-line contact-title-line--outline"><span>INTO ACTION.</span></span>
-          </h2>
-          <a className="contact__email" href="mailto:wuzibx@foxmail.com">
-            WUZIBX@FOXMAIL.COM <Arrow diagonal />
-          </a>
-        </div>
-
-        <footer className="footer shell">
-          <div className="footer__brand">XWB<sup>®</sup></div>
-          <div className="footer__links">
-            <a href="#work">PROJECTS</a>
-            <a href="/谢文炳_AI项目经理_优化简历.pdf" download>RESUME</a>
-            <a href="mailto:wuzibx@foxmail.com">EMAIL</a>
-          </div>
-          <p>© 2026 谢文炳. ALL RIGHTS RESERVED.</p>
-          <a href="#top" className="back-top">BACK TO TOP ↑</a>
-        </footer>
-      </section>
-    </main>
-  )
+      <div className="hero-bottom"><Link href="#projects"><span className="scroll-line" />向下探索</Link><span>BASED IN CHANGSHA · CONNECTED TO THE WORLD</span><button className="video-toggle" onClick={toggleVideo} aria-label={playing ? '暂停背景视频' : '播放背景视频'}><span aria-hidden="true">{playing ? 'Ⅱ' : '▷'}</span>{playing ? '暂停动态' : '播放动态'}</button></div>
+    </div>
+  </section>
 }
 
-export default App
+function PracticeArt({ kind }) {
+  return <div className={'practice-art art-' + kind} aria-hidden="true"><svg viewBox="0 0 180 120" fill="none"><path className="art-grid" d="M0 30H180M0 60H180M0 90H180M30 0V120M60 0V120M90 0V120M120 0V120M150 0V120" />{kind === 'comfyui' ? <><path d="M38 60H72L106 26H145M72 60L106 94H145" /><circle cx="38" cy="60" r="12" /><circle cx="110" cy="26" r="8" /><circle cx="110" cy="94" r="8" /></> : kind === 'content' ? <><rect x="42" y="24" width="56" height="74" rx="2" /><rect x="72" y="15" width="56" height="74" rx="2" /><path d="M84 38H114M84 47H106M84 66H114" /></> : <><path d="M30 84L90 52L150 84L90 116ZM30 61L90 29L150 61L90 93ZM30 38L90 6L150 38L90 70Z" /></>}</svg></div>
+}
+
+function FilmStudy() {
+  return <div className="film-study" aria-hidden="true"><span className="film-study-label">STORYBOARD STUDY / 001</span><svg viewBox="0 0 600 280" fill="none"><defs><linearGradient id="film-light" x1="250" y1="40" x2="450" y2="280" gradientUnits="userSpaceOnUse"><stop stopColor="#ece5d3" stopOpacity=".55" /><stop offset="1" stopColor="#ece5d3" stopOpacity="0" /></linearGradient></defs><path d="M320 25 525 280H155Z" fill="url(#film-light)" /><path d="M42 242H558M80 217H520M133 194H467" stroke="currentColor" opacity=".24" /><path d="M130 242V110L202 67V242M202 67H412V242M238 242V94H380V242" stroke="currentColor" opacity=".6" /><circle cx="315" cy="143" r="12" fill="currentColor" /><path d="M298 162Q315 153 332 162L340 211H330L327 242H317L313 210L310 242H300L301 203H292Z" fill="currentColor" /><path d="M38 56V30H64M536 30H562V56M38 224V250H64M536 250H562V224" stroke="currentColor" opacity=".55" /><path d="M282 24H294M300 24H312M318 24H330" stroke="#e85442" strokeWidth="3" /></svg><span className="film-study-foot"><span>01 / 场景构想</span><span>VISUAL DEVELOPMENT</span></span></div>
+}
+
+function TrustSection() {
+  const signals = [
+    { value: '06', label: '短剧出海流程阶段', href: '#/projects/short-drama' },
+    { value: '04', label: '项目实践方向', href: '#projects' },
+    { value: '04', label: '能力与方法模块', href: '#capabilities' },
+    { value: '01', label: '从洞察到交付的路径', href: '#/projects/short-drama/deliver' },
+  ]
+  return <section className="trust-section section" aria-labelledby="trust-title"><div className="shell trust-inner"><div className="trust-intro"><p className="eyebrow"><span>INDEX</span><span className="label-rule" />AT A GLANCE</p><h2 id="trust-title">清晰的方法，<br /><em>是走向远方的起点。</em></h2><p>从内容实践到出海探索，把每个方向拆成可理解、可执行的步骤。</p></div><div className="trust-signals">{signals.map(signal => <Link className="trust-signal" href={signal.href} key={signal.value + signal.label}><strong>{signal.value}</strong><span>{signal.label}</span><Arrow diagonal /></Link>)}</div></div></section>
+}
+
+function MethodTimeline() {
+  const items = [
+    { id: 'market', number: '01', title: '先看市场', text: '明确受众、渠道与需要验证的问题。' },
+    { id: 'story', number: '02', title: '再做内容', text: '把选题拆成故事、脚本与可制作的镜头。' },
+    { id: 'produce', number: '03', title: '用 AI 提效', text: '连接画面、声音与剪辑，保留过程记录。' },
+    { id: 'iterate', number: '04', title: '最后复盘', text: '把交付反馈带回下一轮创作与判断。' },
+  ]
+  return <section className="method-timeline section" aria-labelledby="timeline-title"><div className="shell"><div className="timeline-head"><div><p className="eyebrow"><span>06</span><span className="label-rule" />THE WAY I WORK</p><h2 id="timeline-title">一条可复用的<br /><em>出海工作路径。</em></h2></div><p>从市场判断到发布复盘，每一步都有输入、输出和下一步。完整 Skill 资料补齐后，会在这条路径上继续展开。</p></div><div className="timeline-track">{items.map(item => <Link className="timeline-item" href={'#/projects/short-drama/' + item.id} key={item.id}><span className="timeline-number">{item.number}</span><span className="timeline-line" /><div><h3>{item.title}</h3><p>{item.text}</p></div><Arrow diagonal /></Link>)}</div></div></section>
+}
+
+function ReferenceCard({ item, index }) {
+  const isAgent = agentReferences.some(reference => reference.id === item.id)
+  return <a className={'reference-card ' + (isAgent ? 'reference-agent' : 'reference-video')} href={item.url} target="_blank" rel="noreferrer">
+    <div className="reference-card-top"><span>{isAgent ? 'AI AGENT' : 'STORY & VIDEO'}</span><span className="reference-serial">{String(index + 1).padStart(2, '0')}</span></div>
+    <h3>{item.title}</h3>
+    <p>{item.summary}</p>
+    <div className="reference-tags">{item.tags.map(tag => <span key={tag}>{tag}</span>)}</div>
+    <div className="reference-card-foot"><span>查看 GitHub 项目</span><Arrow diagonal /></div>
+  </a>
+}
+
+function ReferenceLibrary() {
+  const [filter, setFilter] = useState('all')
+  const all = [...referenceProjects, ...agentReferences]
+  const visible = filter === 'video' ? referenceProjects : filter === 'agent' ? agentReferences : all
+  const filters = [{ id:'all', label:'全部项目', count:all.length }, { id:'video', label:'短剧与 AI 视频', count:referenceProjects.length }, { id:'agent', label:'AI Agent', count:agentReferences.length }]
+  return <section className="references section" id="references" aria-labelledby="references-title"><div className="shell">
+    <div className="references-head"><div><Label number="02">OPEN SOURCE / FIELD NOTES</Label><h2 id="references-title">在开放的技术里，<br /><em>寻找下一种可能。</em></h2></div><div className="reference-intro"><p>短剧生产、生成式视频、多 Agent 协作。沿着具体项目，观察内容从想法走向交付的不同路径。</p><span>外部开源研究参考 · 项目归原作者所有</span></div></div>
+    <div className="reference-toolbar"><div className="reference-filters" role="group" aria-label="筛选开源项目">{filters.map(item => <button type="button" key={item.id} aria-pressed={filter === item.id} onClick={() => setFilter(item.id)}>{item.label}<span>{String(item.count).padStart(2, '0')}</span></button>)}</div><span className="reference-count" role="status" aria-live="polite">{visible.length} 个项目</span></div>
+    <div className="reference-grid">{visible.map(item => <ReferenceCard item={item} key={item.id} index={all.indexOf(item)} />)}</div>
+    <p className="reference-colophon">INDEPENDENT RESEARCH <span>持续观察，持续连接。</span></p>
+  </div></section>
+}
+
+export function Arrow({ diagonal = false, back = false }) {
+  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className={'arrow' + (diagonal ? ' diagonal' : '') + (back ? ' back' : '')}><path d="M4 12h15M13 5l7 7-7 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+}
+
+function Header({ route }) {
+  const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const menuButton = useRef(null)
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > 48)
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    return () => window.removeEventListener('scroll', update)
+  }, [])
+  useEffect(() => {
+    const close = () => setOpen(false)
+    const escape = e => { if (e.key === 'Escape' && open) { setOpen(false); menuButton.current?.focus() } }
+    window.addEventListener('hashchange', close)
+    window.addEventListener('keydown', escape)
+    return () => { window.removeEventListener('hashchange', close); window.removeEventListener('keydown', escape) }
+  }, [open])
+  return <header className={'header' + (scrolled ? ' is-scrolled' : '')}><div className="shell header-inner">
+    <Link className="brand" href="#top" aria-label="谢文炳，返回首页"><span className="brand-mark">XW<span>·</span></span><span className="brand-name">谢文炳<small>GLOBAL PERSPECTIVE</small></span></Link>
+    <button ref={menuButton} className="menu-toggle" aria-expanded={open} aria-controls="main-nav" aria-label={open ? '关闭导航' : '打开导航'} onClick={() => setOpen(!open)}>{open ? '关闭' : '菜单'} <span aria-hidden="true">{open ? '−' : '+'}</span></button>
+    <nav id="main-nav" className={'nav ' + (open ? 'is-open' : '')} aria-label="主导航">
+      <Link href="#/case/video-production" aria-current={route.type === 'case' ? 'page' : undefined} onClick={() => setOpen(false)}>AI 视频制作</Link>
+      <Link href="#about" aria-current={route.section === 'about' ? 'location' : undefined} onClick={() => setOpen(false)}>关于我</Link><Link href="#projects" aria-current={route.section === 'projects' || route.type === 'project' ? 'location' : undefined} onClick={() => setOpen(false)}>项目实践</Link><Link href="#/projects/short-drama" aria-current={route.id === 'short-drama' ? 'page' : undefined} onClick={() => setOpen(false)}>出海工作流</Link><Link href="#capabilities" aria-current={route.section === 'capabilities' || route.type === 'capability' ? 'location' : undefined} onClick={() => setOpen(false)}>能力与方法</Link><Link href="#references" aria-current={route.section === 'references' ? 'location' : undefined} onClick={() => setOpen(false)}>开源参考</Link><Link className="nav-contact" href="#contact" onClick={() => setOpen(false)}>联系我</Link>
+    </nav><Link className="header-contact" href="#contact">联系我 <Arrow diagonal /></Link>
+  </div></header>
+}
+function Label({ number, children }) { return <div className="eyebrow"><span>{number}</span><span className="label-rule" />{children}</div> }
+function SectionHead({ number, en, title, text }) {
+  return <div className="section-head"><div><Label number={number}>{en}</Label><h2>{title}</h2></div>{text && <p>{text}</p>}</div>
+}
+function Home() {
+  return <>
+    <Hero />
+    <nav className="focus-strip" aria-label="探索方向"><div className="shell focus-strip-inner"><span className="focus-label">我的关注 / FOCUS</span><Link href="#/capabilities/planning"><span>01</span>产业与市场<Arrow diagonal /></Link><Link href="#/projects/short-drama"><span>02</span>内容与出海<Arrow diagonal /></Link><Link href="#/capabilities/workflow"><span>03</span>AI 与交付<Arrow diagonal /></Link></div></nav>
+    <section className="projects section" id="projects" aria-labelledby="projects-title"><div className="shell">
+      <SectionHead number="01" en="SELECTED PRACTICE" title={<span id="projects-title">从实践出发，向世界延伸。</span>} text="围绕产业出海，连接已有的内容制作、工作流搭建与项目运营经验。" />
+      <article className="featured-project"><div className="featured-copy"><div className="project-meta"><span>FEATURED PRACTICE / 01</span><span className="status-tag">框架预览</span></div><Link href="#/projects/short-drama"><h3>短剧出海<br /><span>Skill 工作流</span></h3></Link><p>从市场洞察，到本地化与 AI 制作。<br />让一个故事，有走向更多市场的可能。</p><div className="tag-list"><span>内容出海</span><span>AI WORKFLOW</span><span>项目协同</span></div><Link className="featured-cta" href="#/projects/short-drama">探索完整流程 <span className="circle-arrow"><Arrow diagonal /></span></Link><span className="featured-note">六阶段框架 · 完整 Skill 资料待补充</span></div><div className="workflow-preview"><div className="workflow-preview-head"><span>THE STORY GOES FURTHER.</span><span>01—06</span></div><FilmStudy /><div className="workflow-preview-title" aria-hidden="true">One story.<br /><em>New horizons.</em></div><div className="flow-steps">{stages.map((stage,i) => <Link href={'#/projects/short-drama/' + stage.id} key={stage.id}><span>{String(i+1).padStart(2,'0')}</span><strong>{stage.short}</strong><Arrow diagonal /></Link>)}</div><div className="workflow-preview-foot"><span>INSIGHT → CREATION → ITERATION</span><span>点击阶段进入详情 ↗</span></div></div></article>
+      <div className="project-list">{projects.slice(1).map(project => <Link className="project-row" href={'#/projects/' + project.id} key={project.id}><span className="project-number">{project.number}</span><PracticeArt kind={project.id} /><div className="project-row-title"><span>{project.en}</span><h3>{project.title}</h3></div><p>{project.summary}</p><span className="project-category">{project.category}</span><span className="project-row-arrow"><Arrow diagonal /></span></Link>)}</div>
+      <Link className="lab-entry" href="#playground"><span><small>TRY IT</small>动手试试：出海互动实验</span><Arrow diagonal /></Link>
+    </div></section>
+    <VideoCapabilityEntry />
+    <InteractionLab />
+    <ReferenceLibrary />
+    <section className="about section shell" id="about" aria-labelledby="about-title">
+      <div className="about-side"><Label number="03">ABOUT ME</Label><p className="about-name">谢文炳<span>XIE WENBING</span></p><span className="small-label">产业出海方向 / 项目与内容协同</span></div>
+      <div className="about-main"><h2 id="about-title">用全球视角看机会，<br /><span className="muted-title">用项目方法做交付。</span></h2><div className="about-copy"><p>我关注产业出海中的内容传播与项目协同，以短剧出海工作流作为当前探索切入点。能把内容目标拆成脚本、素材、字幕与成片环节，让创意有可执行的制作路径。</p><p>工商管理本科背景，具备 AI 短剧账号从 0 到 1 的独立执行经验。熟悉 ComfyUI 本地工作流，结合 MoneyPrinterTurbo、即梦与剪映，推进选题、制作、发布和复盘。</p></div><div className="about-notes"><div><span>关注方向</span><strong>产业出海 · 内容本地化 · AI 工作流</strong></div><div><span>实践基础</span><strong>AI 视频制作 · 运营复盘 · 团队协同</strong></div></div><Link className="underlined-link" href={RESUME} target="_blank" rel="noreferrer">查看个人简历 <Arrow diagonal /></Link><span className="resume-note">现有版本 · AI 项目方向</span></div>
+    </section>
+    <TrustSection />
+    <section className="capabilities section shell" id="capabilities" aria-labelledby="capabilities-title"><SectionHead number="04" en="CAPABILITIES & APPROACH" title={<span id="capabilities-title">把复杂目标，拆成清晰行动。</span>} text="将项目管理与 AI 内容能力，应用到产业出海的具体环节。" /><div className="capability-grid">{capabilities.map((item,i) => <Link className="capability-card" href={'#/capabilities/' + item.id} key={item.id}><div className="capability-top"><span>{String(i+1).padStart(2,'0')}</span><Arrow diagonal /></div><span className="capability-en">{item.en}</span><h3>{item.title}</h3><p>{item.summary}</p><div className="capability-bottom">{item.tags.join(' / ')}</div></Link>)}</div></section>
+    <section className="approach section"><div className="shell approach-inner"><div><Label number="05">WORKING PRINCIPLES</Label><h2>方向可以远，<br />每一步要具体。</h2></div><div className="principles"><div><span>01</span><div><h3>先理解市场，再定义内容</h3><p>把用户、渠道与表达方式放在同一张计划里，从小范围验证开始。</p></div></div><div><span>02</span><div><h3>让工具服务目标</h3><p>根据内容任务选择 AI 工具，用清晰的输入、输出与质量标准串联流程。</p></div></div><div><span>03</span><div><h3>把经验留下，把流程复用</h3><p>用项目记录、素材规范和阶段复盘，减少下一次执行的不确定性。</p></div></div></div></div></section>
+    <MethodTimeline />
+  </>
+}
+export function ProjectDetail({ project, activeStage }) {
+  const isWorkflow = project.id === 'short-drama'
+  const next = projects[(projects.findIndex(p => p.id === project.id) + 1) % projects.length]
+  return <article className="detail-page">
+    <div className="detail-hero"><div className="shell"><Link className="back-link" href="#projects"><Arrow back />返回项目实践</Link><div className="detail-heading"><div><Label number={project.number}>{project.en}</Label><h1 id="detail-title" tabIndex="-1">{project.title}</h1><p>{project.intro}</p></div><span className="detail-status">{project.status}</span></div><dl className="detail-meta"><div><dt>关注环节</dt><dd>{project.role}</dd></div><div><dt>{isWorkflow ? '已有制作工具基础' : '实践工具与方法'}</dt><dd>{project.tools.join(' / ')}</dd></div><div><dt>方向</dt><dd>产业出海 · 内容与项目</dd></div></dl></div></div>
+    <div className="shell detail-layout">
+      {isWorkflow ? <aside className="detail-sidebar"><p className="eyebrow">WORKFLOW INDEX</p><nav aria-label="工作流阶段">{stages.map((stage,i) => <Link key={stage.id} href={'#/projects/short-drama/' + stage.id} aria-current={activeStage === stage.id ? 'step' : undefined}><span>{String(i+1).padStart(2,'0')}</span>{stage.short}<Arrow /></Link>)}</nav><p className="sidebar-note">六个阶段，一条交付路径。<br />点击阶段查看工作内容。</p></aside> : <aside className="detail-sidebar"><p className="eyebrow">PROJECT CONTEXT</p><p className="context-note">{project.context}</p><Link className="underlined-link" href="#contact">交流这个方向 <Arrow diagonal /></Link></aside>}
+      <div className="detail-content">
+        {isWorkflow ? <>
+          <Link className="related-project" href="#/case/video-production"><span><span className="eyebrow">AI VIDEO / PRODUCTION CAPABILITY</span><strong>了解我的 AI 视频制作能力</strong><small>脚本 · 素材 · 字幕 · 成片</small></span><Arrow diagonal /></Link>
+          <div className="workflow-notice"><span className="notice-label">框架预览</span><h2>先建立路径，再补齐每一步。</h2><p>{project.context}</p><p className="notice-small">以下为展示用流程框架，并非已上传或可运行的完整 Skill。</p></div>
+          {stages.map((stage,i) => <section className="stage" id={'stage-' + stage.id} tabIndex="-1" key={stage.id} aria-labelledby={'stage-title-' + stage.id}><div className="stage-heading"><span className="stage-number">{String(i+1).padStart(2,'0')}</span><div><span className="stage-label">{stage.short}</span><h2 id={'stage-title-' + stage.id}>{stage.title}</h2></div></div><p className="stage-intro">{stage.text}</p><ul className="task-list">{stage.tasks.map(task => <li key={task}>{task}</li>)}</ul><dl className="stage-io"><div><dt>输入 / INPUT</dt><dd>{stage.inputs}</dd></div><div><dt>交付物 / OUTPUT</dt><dd>{stage.outputs}</dd></div></dl></section>)}
+          <section className="resource-panel"><p className="eyebrow">SKILL LIBRARY</p><h2>工作流资料</h2><p>完整 Skill、提示词模板、工具配置和成果案例将在整理后补充。</p><ul><li><span>Skill 文档与执行说明</span><span>待补充</span></li><li><span>提示词与本地化模板</span><span>待补充</span></li><li><span>工具链与节点工作流</span><span>待补充</span></li><li><span>样片与项目复盘</span><span>待补充</span></li></ul></section>
+        </> : <><p className="eyebrow">APPROACH & PRACTICE</p>{project.sections.map((section,i) => <section className="story-section" key={section.title}><span className="stage-label">{String(i+1).padStart(2,'0')}</span><h2>{section.title}</h2><p>{section.text}</p></section>)}<div className="detail-note">具体素材、过程记录与成果样本，后续补充展示。</div></>}
+      </div>
+    </div>
+    <div className="shell detail-bottom"><Link className="back-link" href="#projects"><Arrow back />所有项目</Link><Link className="next-project" href={'#/projects/' + next.id}><span>下一个项目<small>{next.title}</small></span><Arrow /></Link></div>
+  </article>
+}
+
+export function CapabilityDetail({ item }) {
+  const related = projects.find(project => project.id === item.project)
+  return <article className="detail-page"><div className="detail-hero"><div className="shell"><Link className="back-link" href="#capabilities"><Arrow back />返回能力与方法</Link><div className="detail-heading"><div><Label number="METHOD">{item.en}</Label><h1 id="detail-title" tabIndex="-1">{item.title}</h1><p>{item.intro}</p></div></div></div></div><div className="shell detail-layout"><aside className="detail-sidebar"><p className="eyebrow">WORKING APPROACH</p><p className="context-note">围绕产业出海中的内容与项目任务，连接已有实践与持续探索。</p><div className="tag-list">{item.tags.map(tag => <span key={tag}>{tag}</span>)}</div></aside><div className="detail-content">{item.sections.map((section,i) => <section className="story-section" key={section.title}><span className="stage-label">{String(i+1).padStart(2,'0')}</span><h2>{section.title}</h2><p>{section.text}</p></section>)}<Link className="related-project" href={'#/projects/' + related.id}><span><span className="eyebrow">RELATED PRACTICE</span><strong>{related.title}</strong></span><Arrow diagonal /></Link></div></div></article>
+}
+
+function MissingPage() {
+  return <section className="shell missing-page"><p className="eyebrow">PAGE NOT FOUND</p><h1 id="detail-title" tabIndex="-1">这个内容暂时未找到。</h1><p>可以返回首页，继续查看项目与工作流。</p><Link className="button button-dark" href="#projects">查看项目实践 <Arrow /></Link></section>
+}
+
+function Contact() {
+  return <section className="contact" id="contact" aria-labelledby="contact-title"><div className="shell"><div className="contact-top"><div><p className="eyebrow">LET’S CONNECT</p><h2 id="contact-title">下一站，<br /><span>一起走向更大的市场。</span></h2></div><div className="contact-copy"><p>期待产业出海、AI 内容与项目协同方向的机会。<br />欢迎交流具体想法与合作需求。</p><Link className="contact-email" href={'mailto:' + EMAIL}>{EMAIL}<Arrow diagonal /></Link></div></div><footer className="footer"><Link className="brand-mark" href="#top" aria-label="返回首页">XW<span>·</span></Link><span>© {new Date().getFullYear()} 谢文炳</span><span>CHANGSHA, CHINA</span><Link href="#top">回到顶部 ↑</Link></footer></div></section>
+}
+export default function App({ initialHash }) {
+  const [route, setRoute] = useState(() => initialHash !== undefined ? parseHash(initialHash) : parseLocation(typeof window === 'undefined' ? undefined : window.location))
+  const pageKey = route.type + '/' + route.id
+  const previousPage = useRef(pageKey)
+  useEffect(() => {
+    const update = () => setRoute(parseLocation(window.location))
+    window.addEventListener('hashchange', update)
+    window.addEventListener('popstate', update)
+    return () => { window.removeEventListener('hashchange', update); window.removeEventListener('popstate', update) }
+  }, [])
+  useEffect(() => {
+    document.title = routeTitle(route)
+    const changedPage = previousPage.current !== pageKey
+    previousPage.current = pageKey
+    const frame = requestAnimationFrame(() => {
+      if (route.type !== 'home' && !route.section) {
+        window.scrollTo({ top: 0, behavior: 'instant' })
+        document.getElementById('detail-title')?.focus({ preventScroll: true })
+        return
+      }
+      const targetId = route.type === 'home' ? route.section : 'stage-' + route.section
+      const target = document.getElementById(targetId)
+      if (target) {
+        target.scrollIntoView({ behavior: changedPage ? 'instant' : 'auto', block: 'start' })
+        if (changedPage || route.type !== 'home') {
+          if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1')
+          target.focus({ preventScroll: true })
+        }
+      } else window.scrollTo({ top: 0, behavior: 'instant' })
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [route.section, pageKey])
+  const skipToMain = event => { event.preventDefault(); const main = document.getElementById('main'); main?.focus(); main?.scrollIntoView() }
+  const repeatNavigation = event => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+    const link = event.target.closest('a')
+    if (!link) return
+    const url = new URL(link.href, window.location.href)
+    if (url.origin !== window.location.origin || url.pathname !== window.location.pathname || url.hash !== window.location.hash) return
+    event.preventDefault()
+    const target = document.getElementById(route.type === 'home' ? route.section : route.section ? 'stage-' + route.section : 'detail-title')
+    target?.scrollIntoView({ behavior: 'auto', block: 'start' })
+    target?.focus({ preventScroll: true })
+  }
+  return <div className="site" onClick={repeatNavigation}><Link className="skip-link" href="#main" onClick={skipToMain}>跳到主要内容</Link><SiteEffects pageKey={pageKey} /><Header route={route} />{route.type === 'home' && <Opening />}<main id="main" tabIndex="-1">{route.type === 'case' ? <VideoCapability /> : route.type === 'project' ? <ProjectDetail key={pageKey} activeStage={route.section} project={projects.find(p => p.id === route.id)} /> : route.type === 'capability' ? <CapabilityDetail key={pageKey} item={capabilities.find(c => c.id === route.id)} /> : route.type === 'missing' ? <MissingPage /> : <Home />}</main><Contact /></div>
+}

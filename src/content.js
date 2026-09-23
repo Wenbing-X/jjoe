@@ -1,0 +1,39 @@
+// 收到真实 Skill 和案例后，在此补充内容；不将规划框架表述为已完成成果。
+export const stages = [
+  { id: 'market', short: '市场洞察', title: '明确市场与受众', text: '围绕目标地区、受众偏好与分发渠道，梳理内容方向和验证问题。', inputs: '目标市场、受众假设、参考内容', outputs: '市场观察清单 / 选题方向', tasks: ['整理目标受众与渠道特点', '记录同类内容的叙事与呈现方式', '确定需要优先验证的内容假设'] },
+  { id: 'story', short: '选题策划', title: '把想法写成可制作的故事', text: '将选题拆分为故事梗概、人物关系、节奏与分集脚本，明确制作范围。', inputs: '选题方向、故事素材、制作约束', outputs: '故事梗概 / 分集脚本 / 分镜清单', tasks: ['明确故事冲突与人物动机', '按制作资源拆分脚本与镜头', '建立版本与修改记录'] },
+  { id: 'localize', short: '本地化', title: '让表达进入具体语境', text: '围绕目标市场梳理语言、字幕、配音与文化表达的适配要求，安排人工核对。', inputs: '脚本、目标语言、表达规范', outputs: '本地化脚本 / 字幕与配音要求', tasks: ['标记需要调整的语言与文化表达', '统一人名、术语与字幕风格', '为语言与内容审核预留节点'] },
+  { id: 'produce', short: 'AI 制作', title: '连接画面、声音与剪辑', text: '以镜头清单为单位组织生成、筛选与剪辑，保持角色、画面和叙事的一致性。', inputs: '分镜、角色设定、声音与视觉参考', outputs: '镜头素材 / 剪辑版本 / 制作记录', tasks: ['拆分画面与声音的制作任务', '记录提示词、参数与素材版本', '逐镜检查连续性与完成度'] },
+  { id: 'deliver', short: '质检交付', title: '让交付有明确标准', text: '按渠道规格检查画面、音轨、字幕与素材来源，整理发布所需的完整内容包。', inputs: '剪辑版本、渠道规格、检查清单', outputs: '成片 / 字幕 / 封面 / 发布素材包', tasks: ['核对画幅、清晰度、字幕与音量', '检查素材来源与使用权限', '记录问题并完成版本归档'] },
+  { id: 'iterate', short: '发布复盘', title: '把反馈带回下一轮创作', text: '记录发布表现与用户反馈，对选题、开头节奏和内容表达形成下一轮验证计划。', inputs: '发布记录、内容表现、用户反馈', outputs: '阶段复盘 / 问题清单 / 迭代计划', tasks: ['按统一口径整理内容表现', '区分观察结果与未经验证的判断', '明确下一轮需要验证的关键问题'] },
+]
+
+export const projects = [
+  { id: 'short-drama', number: '01', en: 'SHORT DRAMA · GLOBAL', title: '短剧出海 Skill 工作流', category: '流程框架', summary: '连接市场洞察、本地化、AI 制作与发布复盘。', intro: '把一个故事带到新的市场，需要的不只是制作效率，也需要清晰的表达、交付和迭代路径。这里先呈现短剧出海的流程框架。', status: '流程框架 · 详细 Skill 待补充', role: '内容策划 / AI 工作流 / 项目协同', tools: ['ComfyUI', '即梦', '剪映', 'Photoshop'], context: '以已有的 AI 短剧账号实践为基础，向内容出海方向延伸。当前展示规划框架，完整 Skill、具体工具链、样片与项目数据将在资料补齐后加入。', sections: [] },
+  { id: 'comfyui', number: '02', en: 'AI PRODUCTION PIPELINE', title: '生成式内容工作流', category: 'AI 制作', summary: 'ComfyUI 本地部署与生成式内容制作，为出海内容探索提供制作基础。', intro: '让生成式工具成为可重复使用的制作环节，从任务拆解到素材输出，减少信息与版本的混乱。', status: '已有实践', role: '本地部署 / 节点工作流 / 素材制作', tools: ['ComfyUI', '即梦', '剪映'], context: '已有实践包括 ComfyUI 本地部署、文生图和图生视频工作流。出海应用部分为后续延伸方向，具体节点配置与成果样本待补充。', sections: [{title:'从内容任务开始',text:'先明确镜头、角色与视觉目标，再选择适合的生成方式。把制作需求整理为可逐项完成的任务清单。'}, {title:'串联制作环节',text:'结合 ComfyUI、即梦与剪映，组织画面生成、素材筛选和剪辑。保留关键参数与版本，方便复用和调整。'}, {title:'面向后续出海应用',text:'可在现有流程中加入不同语言版本的素材组织、字幕配音和渠道规格检查。具体适配方式需结合目标市场确定。'}] },
+  { id: 'content', number: '03', en: 'CONTENT OPERATIONS', title: '内容运营与迭代', category: '运营复盘', summary: '从选题到发布复盘，把已有内容运营经验转化为持续迭代的方法。', intro: '内容发布是一次验证的开始。把选题、制作、反馈放在同一条流程里，让下一轮行动有依据。', status: '已有实践', role: '账号搭建 / 发布运营 / 数据复盘', tools: ['抖音', '小红书', '剪映'], context: '现有经验来自抖音与小红书的内容实践，包括 AI 短剧账号从 0 到 1 搭建。这里展示可迁移的运营方法，不代表已经完成海外平台运营。', sections: [{title:'围绕定位组织选题',text:'明确账号定位和内容主题，安排选题、脚本与制作节奏，让每条内容对应具体的表达目标。'}, {title:'整理发布与素材记录',text:'统一记录脚本、封面、发布时间与版本信息，减少发布环节的遗漏，也为后续复盘保留依据。'}, {title:'将反馈转化为行动',text:'结合播放量、互动率与内容反馈定位问题，把复盘结论转化为下一轮选题和制作调整。具体数据与案例待补充。'}] },
+  { id: 'business', number: '04', en: 'BUSINESS & COLLABORATION', title: '经营决策与项目协同', category: '项目管理', summary: '以工商管理与 ERP 模拟实践为基础，理解目标、资源和团队执行的关系。', intro: '项目推进需要对目标、资源与协作方式形成共同理解。用清楚的任务和节点，把决策连接到执行。', status: '学习与模拟实践', role: '经营决策 / 资源配置 / 团队协作', tools: ['ERP 模拟', 'WBS', '里程碑计划'], context: '工商管理学习背景，包含 2025 年 ERP 经营模拟与团队协作实践，以及校园活动策划、执行经验。产业出海是当前关注和拓展的方向。', sections: [{title:'理解目标与资源约束',text:'在经营模拟中关注业务目标、资源配置与决策之间的联系，形成从整体目标看待单项任务的习惯。'}, {title:'把计划落实到节点',text:'梳理项目范围、任务优先级和里程碑，让协作过程有明确的负责人、交付内容和沟通节点。'}, {title:'在协作中记录问题',text:'通过问题清单与阶段回顾记录执行中的变化，为下一次任务分工和资源安排提供参考。具体项目记录待补充。'}] },
+]
+
+export const capabilities = [
+  {id:'planning',en:'RESEARCH & PLANNING',title:'理解方向，拆清需求',summary:'围绕出海目标梳理受众、渠道、任务范围与验证问题，让计划有明确的起点。',tags:['需求梳理','项目规划'],intro:'面对新的市场与任务，先把不确定性变成具体问题，再形成可执行的计划。',sections:[{title:'明确目标与边界',text:'整理目标市场、目标用户、项目范围和资源约束，区分已有信息与待验证假设。'},{title:'形成任务与交付清单',text:'把目标拆成阶段任务、时间节点与交付要求，以 WBS 和里程碑协调后续工作。'},{title:'从小范围验证开始',text:'优先选择能够快速产出反馈的内容样本或方案原型，根据验证结果再调整投入。'}],project:'business'},
+  {id:'localization',en:'CONTENT & LOCALIZATION',title:'连接内容与市场语境',summary:'探索故事、视觉与字幕配音的本地化需求，当前展示流程框架，市场与语种案例待补充。',tags:['内容策划','本地化需求'],intro:'内容出海不止是替换语言，也需要把受众、表达习惯与渠道要求纳入同一套流程。',sections:[{title:'定义需要适配的内容',text:'标记脚本、人物、视觉、字幕与配音中的适配点，明确需要语言或当地市场经验支持的环节。'},{title:'把本地化变成协作任务',text:'整理素材、术语和版本要求，为翻译、配音与人工校对建立清晰的输入和输出。'},{title:'明确能力边界',text:'此处展示内容本地化的工作思路；具体语种、市场经验与已完成案例将在有真实资料后补充。'}],project:'short-drama'},
+  {id:'workflow',en:'AI-ENABLED PRODUCTION',title:'用 AI 串联制作流程',summary:'以 ComfyUI、MoneyPrinterTurbo 等工具组织脚本、素材、字幕与成片流程，让制作有清晰输入和交付标准。',tags:['ComfyUI','MoneyPrinterTurbo','流程搭建'],intro:'以具体内容目标组织工具，把一次制作过程变成可以复盘、可以继续优化的工作流。',sections:[{title:'按任务选择工具',text:'根据脚本、画面、声音和剪辑需求选择工具，能用 MoneyPrinterTurbo 把已有素材与文案整理成带字幕的短片样本。'},{title:'保留可追溯的制作记录',text:'整理提示词、参数、源素材与输出版本，方便比较方案、定位问题和复用设置。'},{title:'在关键节点检查质量',text:'对画面连续性、字幕音轨和最终导出设置检查点，让流程服务于稳定交付。'}],project:'comfyui'},
+  {id:'delivery',en:'DELIVERY & ITERATION',title:'推进交付，持续复盘',summary:'围绕里程碑跟进素材、版本和问题，以反馈推动下一轮执行。',tags:['节点跟进','数据复盘'],intro:'让每个阶段都有明确结果，并把发布后的反馈重新带回项目计划。',sections:[{title:'维护统一的任务记录',text:'明确负责人、截止时间与待解决问题，集中记录脚本、素材和版本状态。'},{title:'按标准完成交付',text:'用交付清单核对完成度，保留版本说明和必要素材，让后续协作有据可循。'},{title:'把复盘落实为下一步',text:'结合内容表现与执行记录定位问题，形成下一轮具体的调整动作与验证目标。'}],project:'content'},
+]
+
+// External GitHub references. These are research links, not personal projects or claimed work.
+export const referenceProjects = [
+  { id:'story-claw', label:'短剧生产 / OPEN SOURCE', title:'Story Claw', summary:'把小说拆成短剧集的本地生产线，覆盖脚本、角色、分镜、镜头生成与成片编排。', detail:'适合观察“故事资产 → 可制作镜头 → 连续剧集”的拆解方式。项目支持自托管的 ComfyUI / LTX 工作流。', tags:['脚本拆解','ComfyUI','LTX'], url:'https://github.com/ZC89757/story-claw' },
+  { id:'ai-director-skills', label:'短片流程 / SKILL PIPELINE', title:'AI Director Skills', summary:'从短故事到 AI 短片的一条本地流程，加入故事质量门、人工检查点和角色一致性控制。', detail:'适合参考如何把导演判断、质量门与本地数据整理成可复用的 Skill。', tags:['质量门','人工检查点','角色一致性'], url:'https://github.com/hzw1199/AI-Director-Skills' },
+  { id:'ai-video-generation-system', label:'短剧系统 / END-TO-END', title:'AI Video Generation System', summary:'用 Qwen 生成结构化剧本，再串联一致性状态、ComfyUI / H3 和 MoviePy 输出成片。', detail:'适合参考脚本结构化、镜头连续性、缓存恢复与最终合成如何连接。', tags:['Qwen','H3','MoviePy'], url:'https://github.com/hh591/ai-video-generation-system' },
+  { id:'comfyui-workflows', label:'短剧流水线 / COMFYUI', title:'ComfyUI Workflows', summary:'基于 ComfyUI 与 Skills 的 AI 短剧流水线，串联角色设定、分镜、视频、TTS 与音画合成。', detail:'适合参考本地节点工作流如何拆成角色、镜头、声音和合成等制作任务。', tags:['ComfyUI','TTS','音画合成'], url:'https://github.com/w993322800/comfyui_workflows' },
+  { id:'comic-drama', label:'动态漫画 / PROTOTYPE', title:'Comic-drama', summary:'从脚本生成结构化场景、角色与对白，再进入关键帧、TTS 和动态漫画片段。', detail:'适合参考“结构化脚本 → 视觉资产 → 时间线”的轻量化原型。', tags:['结构化脚本','关键帧','时间线'], url:'https://github.com/tccnnd/Comic-drama' },
+  { id:'openx-flow', label:'视频自动化 / AGENTIC', title:'OpenX Flow', summary:'从选题、脚本到逐场景视频、旁白、音乐与发布素材的自主视频生成流程。', detail:'适合观察内容生产链如何面向 TikTok、YouTube Shorts 和 Reels 组织交付。', tags:['脚本代理','视频生成','多渠道'], url:'https://github.com/OpenX-Inc/flow' },
+]
+
+export const agentReferences = [
+  { id:'datarobot-agent-templates', label:'AI AGENT / TEMPLATES', title:'DataRobot Agent Templates', summary:'把 CrewAI、LangGraph、LlamaIndex、NeMo 等框架整理成可运行的多代理工作流模板。', detail:'适合拆解研究、规划、执行和评估任务如何分给不同 Agent。', tags:['CrewAI','LangGraph','多代理'], url:'https://github.com/datarobot-community/datarobot-agent-templates' },
+  { id:'langgraph-workflows-agents', label:'AI AGENT / ORCHESTRATION', title:'LangGraph Workflows & Agents', summary:'用图结构组织工作流与 Agent，强调状态、持久化、流式输出、调试与部署。', detail:'适合参考复杂内容任务如何保留状态，并在关键节点介入人工判断。', tags:['状态管理','持久化','人工介入'], url:'https://github.com/langchain-ai/docs/blob/main/src/oss/langgraph/workflows-agents.mdx' },
+  { id:'crewai', label:'AI AGENT / CREWS & FLOWS', title:'CrewAI', summary:'以 Crews 和 Flows 组织多代理协作，适合把研究、规划、执行与复盘拆成可编排任务。', detail:'适合参考事件驱动流程、任务状态与 Agent 团队之间的协作边界。', tags:['Crews','Flows','事件驱动'], url:'https://github.com/crewAIInc/crewAI' },
+]
