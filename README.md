@@ -32,9 +32,10 @@ React + Vite 个人网站，关注产业出海、AI 内容和项目协同。保�
 - public/videos/hero-harbor.mp4：由港口主视觉制作的 12 秒、720p、无声循环背景视频，可用 `scripts/create-hero-video.ps1` 重新生成。
 - public/images/global-sculpture.png：先前的地球主题素材，保留在 AI 视频能力案例中；public/videos/global-intro.mp4 仅作源文件归档。
 - public/videos/studio-sample.mp4：基于本站主视觉素材，经 MoneyPrinterTurbo v1.3.7 本地剪辑并烧录中文字幕的样片；上游项目版权归原作者。
+- public/skills/short-drama-global/：原创短剧出海 Skill、策划与本地化模板、制作质检清单。网站资料卡链接到 GitHub 中可阅读的版本。
 - public/谢文炳_AI项目经理_优化简历.pdf：原版简历。
 
-短剧出海模块当前是展示用流程框架。完整 Skill、提示词模板、工具链和案例资料补齐后，再更新对应内容；不要将待补资料标注为可下载或已执行的成果。
+短剧出海模块已提供六阶段执行文档、模板、制作质检清单和现有本地流程试制样片。文档借鉴 AI Director Skills、Story Claw、ComfyUI Workflows 等公开项目的制作方法，并标注原作者来源；本站未复制其代码或工作流文件，也不把海外发行效果、语种成片或第三方项目写成个人已完成成果。
 
 ## 路由
 
