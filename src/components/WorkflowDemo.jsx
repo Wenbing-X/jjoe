@@ -102,7 +102,7 @@ export default function WorkflowDemo() {
         <button type="button" className="wd-reset" onClick={reset}>重置</button>
         <span className="wd-status"><span className={`wd-status-dot${playing ? ' wd-status-playing' : ''}`} aria-hidden="true" />{statusLabel}<span className="wd-status-count">{String(activeIndex + 1).padStart(2, '0')} / 06</span></span>
       </div>
-      <p className="wd-note">流程可视化 · 点击任意节点查看 · 完整 Skill 待补充</p>
+      <p className="wd-note">流程可视化 · 点击任意节点查看 · 详情页提供执行文档与模板</p>
       <p className="wd-sr-only" aria-live="polite" aria-atomic="true">第 {activeIndex + 1} 步，共 {stages.length} 步：{stage.short}。</p>
     </article>
   )
