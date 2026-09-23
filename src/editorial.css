@@ -350,3 +350,33 @@ a:focus-visible,button:focus-visible { outline:2px solid #df6e50; outline-offset
       linear-gradient(90deg,#071922aa,transparent 88%);
   }
 }
+
+/* The Skill library is a set of real reading paths, with the review gate visible at every stage. */
+.stage-gate { display:grid; grid-template-columns:160px 1fr; gap:18px; align-items:start; border-left:2px solid var(--signal); padding:14px 20px; margin-top:16px; background:#f1f1ea; }
+.stage-gate span { color:#8b4a3d; font-size:10px; letter-spacing:.08em; line-height:1.8; }
+.stage-gate p { color:#4d626b; font-size:13px; line-height:1.8; margin:0; }
+.skill-resource-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1px; background:#607783; border:1px solid #607783; margin-top:28px; }
+.skill-resource { display:grid; grid-template-columns:1fr auto; grid-template-rows:auto auto 1fr; gap:10px; min-height:190px; padding:22px 24px; background:#183340; color:#eaf0eb; transition:background .2s ease; }
+.skill-resource:hover,.skill-resource:focus-visible { background:#254856; }
+.skill-resource>span { grid-column:1/-1; color:#a8bdc2; font-size:10px; letter-spacing:.1em; }
+.skill-resource strong { grid-column:1; font-size:20px; font-weight:400; line-height:1.35; }
+.skill-resource small { grid-column:1; font-size:12px; line-height:1.7; color:#bfd0d2; }
+.skill-resource .arrow { grid-column:2; grid-row:2 / span 2; width:18px; align-self:start; color:#e4816a; }
+.skill-source-list { border-top:1px solid #ffffff35; margin-top:30px; padding-top:22px; }
+.skill-source-list>p { margin:0 0 14px; color:#b8cdd0; font-size:11px; letter-spacing:.04em; }
+.skill-source-list>div { display:flex; flex-wrap:wrap; gap:8px; }
+.skill-source-list a { border:1px solid #86a2aa6b; color:#e6efed; padding:8px 11px; font-size:12px; line-height:1.4; transition:border-color .2s,background .2s; }
+.skill-source-list a:hover,.skill-source-list a:focus-visible { border-color:#d8e7e4; background:#ffffff10; }
+.resource-panel .skill-limit { border-top:1px solid #ffffff35; margin-top:26px; padding-top:18px; color:#b8cdd0; font-size:12px; line-height:1.8; }
+.timeline-track { grid-template-columns:repeat(3,minmax(0,1fr)); row-gap:16px; }
+.timeline-item p { line-height:1.7; max-width:28ch; }
+@media (max-width:980px) {
+  .timeline-track { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:760px) {
+  .stage-gate { grid-template-columns:1fr; gap:6px; padding:14px 16px; }
+  .skill-resource-grid { grid-template-columns:1fr; }
+  .skill-resource { min-height:155px; padding:19px 20px; }
+  .skill-resource strong { font-size:19px; }
+  .timeline-track { grid-template-columns:1fr; row-gap:0; }
+}

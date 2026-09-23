@@ -7,6 +7,14 @@ import VideoCapability, { VideoCapabilityEntry } from './components/VideoCapabil
 
 const EMAIL = 'wuzibx@foxmail.com'
 const RESUME = '/谢文炳_AI项目经理_优化简历.pdf'
+const SKILL_DOCS = 'https://github.com/Wenbing-X/jjoe/blob/main/public/skills/short-drama-global/'
+const skillResources = [
+  { number: '01', title: '短剧出海 Skill', description: '适用范围、六阶段输入与产出、人工审核和失败回退。', href: SKILL_DOCS + 'SKILL.md', external: true },
+  { number: '02', title: '策划与本地化模板', description: '市场 Brief、分镜表、术语/字幕表与发布复盘字段。', href: SKILL_DOCS + 'templates.md', external: true },
+  { number: '03', title: '制作与质检清单', description: '角色资产、镜头版本、声音检查与交付核验。', href: SKILL_DOCS + 'production-checklist.md', external: true },
+  { number: '04', title: '本地流程试制样片', description: '本站素材制作的 12 秒样片，展示字幕与剪辑链路。', href: '#/case/video-production' },
+]
+const skillSources = ['ai-director-skills', 'story-claw', 'ai-video-generation-system']
 
 function Link({ href, ...props }) {
   return <a {...props} href={href?.startsWith('#') ? hrefFor(href) : href} />
@@ -70,22 +78,16 @@ function FilmStudy() {
 
 function TrustSection() {
   const signals = [
-    { value: '06', label: '短剧出海流程阶段', href: '#/projects/short-drama' },
-    { value: '04', label: '项目实践方向', href: '#projects' },
-    { value: '04', label: '能力与方法模块', href: '#capabilities' },
-    { value: '01', label: '从洞察到交付的路径', href: '#/projects/short-drama/deliver' },
+    { value: '01', label: '短剧出海工作流', href: '#/projects/short-drama' },
+    { value: '02', label: 'AI 视频流程样片', href: '#/case/video-production' },
+    { value: '03', label: '开源方法参考', href: '#references' },
+    { value: '04', label: '能力与交付方法', href: '#capabilities' },
   ]
-  return <section className="trust-section section" aria-labelledby="trust-title"><div className="shell trust-inner"><div className="trust-intro"><p className="eyebrow"><span>INDEX</span><span className="label-rule" />AT A GLANCE</p><h2 id="trust-title">清晰的方法，<br /><em>是走向远方的起点。</em></h2><p>从内容实践到出海探索，把每个方向拆成可理解、可执行的步骤。</p></div><div className="trust-signals">{signals.map(signal => <Link className="trust-signal" href={signal.href} key={signal.value + signal.label}><strong>{signal.value}</strong><span>{signal.label}</span><Arrow diagonal /></Link>)}</div></div></section>
+  return <section className="trust-section section" aria-labelledby="trust-title"><div className="shell trust-inner"><div className="trust-intro"><p className="eyebrow"><span>INDEX</span><span className="label-rule" />AT A GLANCE</p><h2 id="trust-title">清晰的方法，<br /><em>是走向远方的起点。</em></h2><p>按 01—04 探索工作流、制作样片、开源来源与能力方法。</p></div><div className="trust-signals">{signals.map(signal => <Link className="trust-signal" href={signal.href} key={signal.value}><strong>{signal.value}</strong><span>{signal.label}</span><Arrow diagonal /></Link>)}</div></div></section>
 }
 
 function MethodTimeline() {
-  const items = [
-    { id: 'market', number: '01', title: '先看市场', text: '明确受众、渠道与需要验证的问题。' },
-    { id: 'story', number: '02', title: '再做内容', text: '把选题拆成故事、脚本与可制作的镜头。' },
-    { id: 'produce', number: '03', title: '用 AI 提效', text: '连接画面、声音与剪辑，保留过程记录。' },
-    { id: 'iterate', number: '04', title: '最后复盘', text: '把交付反馈带回下一轮创作与判断。' },
-  ]
-  return <section className="method-timeline section" aria-labelledby="timeline-title"><div className="shell"><div className="timeline-head"><div><p className="eyebrow"><span>06</span><span className="label-rule" />THE WAY I WORK</p><h2 id="timeline-title">一条可复用的<br /><em>出海工作路径。</em></h2></div><p>从市场判断到发布复盘，每一步都有输入、输出和下一步。完整 Skill 资料补齐后，会在这条路径上继续展开。</p></div><div className="timeline-track">{items.map(item => <Link className="timeline-item" href={'#/projects/short-drama/' + item.id} key={item.id}><span className="timeline-number">{item.number}</span><span className="timeline-line" /><div><h3>{item.title}</h3><p>{item.text}</p></div><Arrow diagonal /></Link>)}</div></div></section>
+  return <section className="method-timeline section" aria-labelledby="timeline-title"><div className="shell"><div className="timeline-head"><div><p className="eyebrow"><span>06</span><span className="label-rule" />THE WAY I WORK</p><h2 id="timeline-title">一条可复用的<br /><em>出海工作路径。</em></h2></div><p>六个阶段与详情页保持同一编号。每一步都写清输入、产出和人工审核点，可继续查看执行文档与模板。</p></div><div className="timeline-track">{stages.map((stage, index) => <Link className="timeline-item" href={'#/projects/short-drama/' + stage.id} key={stage.id}><span className="timeline-number">{String(index + 1).padStart(2, '0')}</span><span className="timeline-line" /><div><h3>{stage.short}</h3><p>{stage.text}</p></div><Arrow diagonal /></Link>)}</div></div></section>
 }
 
 function ReferenceCard({ item, index }) {
@@ -107,7 +109,7 @@ function ReferenceLibrary() {
   return <section className="references section" id="references" aria-labelledby="references-title"><div className="shell">
     <div className="references-head"><div><Label number="02">OPEN SOURCE / FIELD NOTES</Label><h2 id="references-title">在开放的技术里，<br /><em>寻找下一种可能。</em></h2></div><div className="reference-intro"><p>短剧生产、生成式视频、多 Agent 协作。沿着具体项目，观察内容从想法走向交付的不同路径。</p><span>外部开源研究参考 · 项目归原作者所有</span></div></div>
     <div className="reference-toolbar"><div className="reference-filters" role="group" aria-label="筛选开源项目">{filters.map(item => <button type="button" key={item.id} aria-pressed={filter === item.id} onClick={() => setFilter(item.id)}>{item.label}<span>{String(item.count).padStart(2, '0')}</span></button>)}</div><span className="reference-count" role="status" aria-live="polite">{visible.length} 个项目</span></div>
-    <div className="reference-grid">{visible.map(item => <ReferenceCard item={item} key={item.id} index={all.indexOf(item)} />)}</div>
+    <div className="reference-grid">{visible.map((item,index) => <ReferenceCard item={item} key={item.id} index={index} />)}</div>
     <p className="reference-colophon">INDEPENDENT RESEARCH <span>持续观察，持续连接。</span></p>
   </div></section>
 }
@@ -137,8 +139,7 @@ function Header({ route }) {
     <Link className="brand" href="#top" aria-label="谢文炳，返回首页"><span className="brand-mark">XW<span>·</span></span><span className="brand-name">谢文炳<small>GLOBAL PERSPECTIVE</small></span></Link>
     <button ref={menuButton} className="menu-toggle" aria-expanded={open} aria-controls="main-nav" aria-label={open ? '关闭导航' : '打开导航'} onClick={() => setOpen(!open)}>{open ? '关闭' : '菜单'} <span aria-hidden="true">{open ? '−' : '+'}</span></button>
     <nav id="main-nav" className={'nav ' + (open ? 'is-open' : '')} aria-label="主导航">
-      <Link href="#/case/video-production" aria-current={route.type === 'case' ? 'page' : undefined} onClick={() => setOpen(false)}>AI 视频制作</Link>
-      <Link href="#about" aria-current={route.section === 'about' ? 'location' : undefined} onClick={() => setOpen(false)}>关于我</Link><Link href="#projects" aria-current={route.section === 'projects' || route.type === 'project' ? 'location' : undefined} onClick={() => setOpen(false)}>项目实践</Link><Link href="#/projects/short-drama" aria-current={route.id === 'short-drama' ? 'page' : undefined} onClick={() => setOpen(false)}>出海工作流</Link><Link href="#capabilities" aria-current={route.section === 'capabilities' || route.type === 'capability' ? 'location' : undefined} onClick={() => setOpen(false)}>能力与方法</Link><Link href="#references" aria-current={route.section === 'references' ? 'location' : undefined} onClick={() => setOpen(false)}>开源参考</Link><Link className="nav-contact" href="#contact" onClick={() => setOpen(false)}>联系我</Link>
+      <Link href="#projects" aria-current={route.section === 'projects' || route.type === 'project' ? 'location' : undefined} onClick={() => setOpen(false)}>项目实践</Link><Link href="#/projects/short-drama" aria-current={route.id === 'short-drama' ? 'page' : undefined} onClick={() => setOpen(false)}>出海工作流</Link><Link href="#/case/video-production" aria-current={route.type === 'case' ? 'page' : undefined} onClick={() => setOpen(false)}>AI 视频制作</Link><Link href="#references" aria-current={route.section === 'references' ? 'location' : undefined} onClick={() => setOpen(false)}>开源参考</Link><Link href="#about" aria-current={route.section === 'about' ? 'location' : undefined} onClick={() => setOpen(false)}>关于我</Link><Link href="#capabilities" aria-current={route.section === 'capabilities' || route.type === 'capability' ? 'location' : undefined} onClick={() => setOpen(false)}>能力与方法</Link><Link className="nav-contact" href="#contact" onClick={() => setOpen(false)}>联系我</Link>
     </nav><Link className="header-contact" href="#contact">联系我 <Arrow diagonal /></Link>
   </div></header>
 }
@@ -152,7 +153,7 @@ function Home() {
     <nav className="focus-strip" aria-label="探索方向"><div className="shell focus-strip-inner"><span className="focus-label">我的关注 / FOCUS</span><Link href="#/capabilities/planning"><span>01</span>产业与市场<Arrow diagonal /></Link><Link href="#/projects/short-drama"><span>02</span>内容与出海<Arrow diagonal /></Link><Link href="#/capabilities/workflow"><span>03</span>AI 与交付<Arrow diagonal /></Link></div></nav>
     <section className="projects section" id="projects" aria-labelledby="projects-title"><div className="shell">
       <SectionHead number="01" en="SELECTED PRACTICE" title={<span id="projects-title">从实践出发，向世界延伸。</span>} text="围绕产业出海，连接已有的内容制作、工作流搭建与项目运营经验。" />
-      <article className="featured-project"><div className="featured-copy"><div className="project-meta"><span>FEATURED PRACTICE / 01</span><span className="status-tag">框架预览</span></div><Link href="#/projects/short-drama"><h3>短剧出海<br /><span>Skill 工作流</span></h3></Link><p>从市场洞察，到本地化与 AI 制作。<br />让一个故事，有走向更多市场的可能。</p><div className="tag-list"><span>内容出海</span><span>AI WORKFLOW</span><span>项目协同</span></div><Link className="featured-cta" href="#/projects/short-drama">探索完整流程 <span className="circle-arrow"><Arrow diagonal /></span></Link><span className="featured-note">六阶段框架 · 完整 Skill 资料待补充</span></div><div className="workflow-preview"><div className="workflow-preview-head"><span>THE STORY GOES FURTHER.</span><span>01—06</span></div><FilmStudy /><div className="workflow-preview-title" aria-hidden="true">One story.<br /><em>New horizons.</em></div><div className="flow-steps">{stages.map((stage,i) => <Link href={'#/projects/short-drama/' + stage.id} key={stage.id}><span>{String(i+1).padStart(2,'0')}</span><strong>{stage.short}</strong><Arrow diagonal /></Link>)}</div><div className="workflow-preview-foot"><span>INSIGHT → CREATION → ITERATION</span><span>点击阶段进入详情 ↗</span></div></div></article>
+      <article className="featured-project"><div className="featured-copy"><div className="project-meta"><span>FEATURED PRACTICE / 01</span><span className="status-tag">方法已整理</span></div><Link href="#/projects/short-drama"><h3>短剧出海<br /><span>Skill 工作流</span></h3></Link><p>从市场洞察，到本地化与 AI 制作。<br />让一个故事，有走向更多市场的可能。</p><div className="tag-list"><span>内容出海</span><span>AI WORKFLOW</span><span>项目协同</span></div><Link className="featured-cta" href="#/projects/short-drama">探索完整流程 <span className="circle-arrow"><Arrow diagonal /></span></Link><span className="featured-note">六阶段方法 · 执行文档与模板可查看</span></div><div className="workflow-preview"><div className="workflow-preview-head"><span>THE STORY GOES FURTHER.</span><span>01—06</span></div><FilmStudy /><div className="workflow-preview-title" aria-hidden="true">One story.<br /><em>New horizons.</em></div><div className="flow-steps">{stages.map((stage,i) => <Link href={'#/projects/short-drama/' + stage.id} key={stage.id}><span>{String(i+1).padStart(2,'0')}</span><strong>{stage.short}</strong><Arrow diagonal /></Link>)}</div><div className="workflow-preview-foot"><span>INSIGHT → CREATION → ITERATION</span><span>点击阶段进入详情 ↗</span></div></div></article>
       <div className="project-list">{projects.slice(1).map(project => <Link className="project-row" href={'#/projects/' + project.id} key={project.id}><span className="project-number">{project.number}</span><PracticeArt kind={project.id} /><div className="project-row-title"><span>{project.en}</span><h3>{project.title}</h3></div><p>{project.summary}</p><span className="project-category">{project.category}</span><span className="project-row-arrow"><Arrow diagonal /></span></Link>)}</div>
       <Link className="lab-entry" href="#playground"><span><small>TRY IT</small>动手试试：出海互动实验</span><Arrow diagonal /></Link>
     </div></section>
@@ -179,9 +180,9 @@ export function ProjectDetail({ project, activeStage }) {
       <div className="detail-content">
         {isWorkflow ? <>
           <Link className="related-project" href="#/case/video-production"><span><span className="eyebrow">AI VIDEO / PRODUCTION CAPABILITY</span><strong>了解我的 AI 视频制作能力</strong><small>脚本 · 素材 · 字幕 · 成片</small></span><Arrow diagonal /></Link>
-          <div className="workflow-notice"><span className="notice-label">框架预览</span><h2>先建立路径，再补齐每一步。</h2><p>{project.context}</p><p className="notice-small">以下为展示用流程框架，并非已上传或可运行的完整 Skill。</p></div>
-          {stages.map((stage,i) => <section className="stage" id={'stage-' + stage.id} tabIndex="-1" key={stage.id} aria-labelledby={'stage-title-' + stage.id}><div className="stage-heading"><span className="stage-number">{String(i+1).padStart(2,'0')}</span><div><span className="stage-label">{stage.short}</span><h2 id={'stage-title-' + stage.id}>{stage.title}</h2></div></div><p className="stage-intro">{stage.text}</p><ul className="task-list">{stage.tasks.map(task => <li key={task}>{task}</li>)}</ul><dl className="stage-io"><div><dt>输入 / INPUT</dt><dd>{stage.inputs}</dd></div><div><dt>交付物 / OUTPUT</dt><dd>{stage.outputs}</dd></div></dl></section>)}
-          <section className="resource-panel"><p className="eyebrow">SKILL LIBRARY</p><h2>工作流资料</h2><p>完整 Skill、提示词模板、工具配置和成果案例将在整理后补充。</p><ul><li><span>Skill 文档与执行说明</span><span>待补充</span></li><li><span>提示词与本地化模板</span><span>待补充</span></li><li><span>工具链与节点工作流</span><span>待补充</span></li><li><span>样片与项目复盘</span><span>待补充</span></li></ul></section>
+          <div className="workflow-notice"><span className="notice-label">方法文档已整理</span><h2>六阶段路径，配套执行资料。</h2><p>{project.context}</p><p className="notice-small">页面展示原创方法整理与本地制作基础；具体海外发行成绩仍以真实项目数据为准。</p></div>
+          {stages.map((stage,i) => <section className="stage" id={'stage-' + stage.id} tabIndex="-1" key={stage.id} aria-labelledby={'stage-title-' + stage.id}><div className="stage-heading"><span className="stage-number">{String(i+1).padStart(2,'0')}</span><div><span className="stage-label">{stage.short}</span><h2 id={'stage-title-' + stage.id}>{stage.title}</h2></div></div><p className="stage-intro">{stage.text}</p><ul className="task-list">{stage.tasks.map(task => <li key={task}>{task}</li>)}</ul><dl className="stage-io"><div><dt>输入 / INPUT</dt><dd>{stage.inputs}</dd></div><div><dt>交付物 / OUTPUT</dt><dd>{stage.outputs}</dd></div></dl><div className="stage-gate"><span>人工审核 / QUALITY GATE</span><p>{stage.gate}</p></div></section>)}
+          <section className="resource-panel" id="skill-library" aria-labelledby="skill-library-title"><p className="eyebrow">SKILL LIBRARY</p><h2 id="skill-library-title">可直接查看的工作流资料</h2><p>将开源项目中的制作思路融入自己的出海方法框架；文档、模板和质检清单均可打开阅读。</p><div className="skill-resource-grid">{skillResources.map(item => <Link className="skill-resource" href={item.href} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined} key={item.number}><span>{item.number} / RESOURCE</span><strong>{item.title}</strong><small>{item.description}</small><Arrow diagonal /></Link>)}</div><div className="skill-source-list"><p>开源方法参考 · 项目归原作者所有</p><div>{skillSources.map(id => { const source = referenceProjects.find(item => item.id === id); return <a key={id} href={source.url} target="_blank" rel="noopener noreferrer">{source.title} ↗</a> })}</div></div><p className="skill-limit">海外平台发行数据、具体语种成片与真实客户案例尚未提供，页面不将这些内容写成已有成果。</p></section>
         </> : <><p className="eyebrow">APPROACH & PRACTICE</p>{project.sections.map((section,i) => <section className="story-section" key={section.title}><span className="stage-label">{String(i+1).padStart(2,'0')}</span><h2>{section.title}</h2><p>{section.text}</p></section>)}<div className="detail-note">具体素材、过程记录与成果样本，后续补充展示。</div></>}
       </div>
     </div>
