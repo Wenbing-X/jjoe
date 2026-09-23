@@ -60,7 +60,7 @@ React + Vite 个人网站，关注产业出海、AI 内容和项目协同。保�
 
 ## 部署
 
-作品集可按原 Render 静态网站流程部署，构建产物位于 dist。AI 视频页展示个人制作能力与样片，不调用 MoneyPrinterTurbo API，也没有上传或生成入口。当前只更新本地源码与预览，尚未发布线上站点。页面中的开源来源链接指向 [MoneyPrinterTurbo 原仓库](https://github.com/harry0703/MoneyPrinterTurbo)；完整 MIT 许可保留在 `public/licenses/MoneyPrinterTurbo-LICENSE.txt`。
+本站通过 GitHub `main` 分支部署到 [Render 静态站点](https://jjoe.onrender.com)。构建命令为 `pnpm install --frozen-lockfile; pnpm run build`，发布目录为 `dist`。AI 视频页展示个人制作能力与样片，不调用 MoneyPrinterTurbo API，也没有上传或生成入口。页面中的开源来源链接指向 [MoneyPrinterTurbo 原仓库](https://github.com/harry0703/MoneyPrinterTurbo)；完整 MIT 许可保留在 `public/licenses/MoneyPrinterTurbo-LICENSE.txt`。
 
 ## 动态与交互
 
