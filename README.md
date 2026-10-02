@@ -25,7 +25,7 @@ node scripts/test-pages.mjs
 - `src/components/VideoCapability.jsx`：AI 视频制作能力介绍及本地试制样片。
 - `public/skills/short-drama-global/`：原创 Skill、策划与本地化模板、制作质检清单；详情页链接到 GitHub 可阅读版本。
 
-首页开屏每次会话展示一次，可点击跳过或按键结束。首屏背景视频可手动暂停；作品卡视频进入视口时播放，离开视口时暂停。系统设置“减少动态效果”时跳过开屏，背景与卡片视频不自动播放，其他动效也相应减弱。主要链接和筛选按钮支持键盘操作。
+首页开屏每次会话展示一次，可点击跳过或按键结束。首屏背景视频可手动暂停；AI 视频卡进入视口时播放，离开视口时暂停。系统设置“减少动态效果”时跳过开屏，背景与卡片视频不自动播放，其他动效也相应减弱。主要链接和筛选按钮支持键盘操作。
 
 ### 页面地址
 
@@ -40,7 +40,8 @@ AI 视频能力案例：`case-video-production.html`；旧地址 `tool-video-stu
 ## 素材与事实边界
 
 - `public/images/hero-harbor.png` 和 `public/videos/hero-harbor.mp4`：本站生成的港口氛围视觉，用于首屏、部分卡片和联系区；不代表真实项目拍摄。
-- `public/images/global-sculpture.png` 和 `public/videos/global-intro.mp4`：本站生成的地球主题视觉，分别用于作品卡、AI 视频能力展示等位置。
+- `public/images/short-drama-concept.png` 和 `public/images/content-ops-concept.png`：本轮生成的概念封面，不代表真实拍摄或项目成果。
+- `public/images/global-sculpture.png`：本站生成的地球主题视觉，用于生成式内容工作流卡片；`public/videos/global-intro.mp4` 保留为源素材。
 - `public/videos/studio-sample.mp4`：使用本站素材，经 MoneyPrinterTurbo 本地剪辑并烧录中文字幕的 12 秒流程试制样片；不是海外发行案例。
 - `public/谢文炳_AI项目经理_优化简历.pdf`：保留的原版简历。
 
