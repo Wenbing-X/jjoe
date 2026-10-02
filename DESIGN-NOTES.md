@@ -1,55 +1,26 @@
-# 产业出海作品集改版
+# 作品集设计记录
 
-本版将个人网站调整为「产业出海 · AI 内容 · 项目交付」，以深海蓝、暖白、银色和克制的朱红建立统一风格。首屏用大幅中文标题与衬线英文形成层级；细线、分区编号和充足留白贯穿首页与详情。既有经历作为实践基础，出海延伸内容以探索方向和流程框架呈现。
+## 本轮视觉方向
 
-## 页面与交互
+以 [Strivehaus Work 页面](https://www.strivehaus.com/work)作为作品展示的排版参考，重新组织本站自己的内容。首页从密集的栏目概览转为宽阔的作品画廊：近黑底色、暖纸色文字、少量黄铜色强调、大标题、双列大幅卡片和清晰的项目编号。五张卡片分别通向本站独立页面，先看作品，再读方法。页面没有使用参考站的文案、图片、标志或项目成果。
 
-- 首页：个人定位、重点工作流、项目、开源参考、个人背景、能力、工作原则、联系。项目和开源参考提前展示。
-- 项目区：分镜概念图、三张原创线条封面、清晰的独立页面入口；概念图仅为视觉说明。
-- 开源参考：9 个外部研究链接，可按全部、短剧与 AI 视频、AI Agent 筛选；保留作者归属说明。
-- 4 个项目详情页、4 个能力详情页，以及 1 个 AI 视频制作能力案例页。
-- 短剧出海流程：市场洞察、选题策划、本地化、AI 制作、质检交付、发布复盘。
-- 每个阶段可通过目录跳转；支持刷新、浏览器前进后退、同一阶段重复点击。
-- 手机端折叠菜单，键盘焦点管理，减少动态效果偏好支持。
-- 固定悬浮导航滚动后轻微收紧，半透明虚化背景，约 1.7 秒开屏揭幕；可点击跳过或按键结束。
-- 12 秒本地背景视频，港口实景风格主视觉配渐变遮罩，保留文字对比；可暂停播放。
-- 8 个实际 HTML 详情页面，刷新与静态部署可直接访问，同时兼容原哈希链接。
-- 离线目录版保留独立页面；单文件兼容版内嵌图片、视频、样式与代码。
+首屏沿用本站港口视频，但以暗色遮罩处理，让标题和入口有足够对比度。两张作品卡使用本站本地视频，另两张使用本站生成的图片，经营决策卡使用代码绘制的抽象图形。深色作品区之后以浅色阅读章节承接个人背景、能力与六阶段方法，末尾回到带港口图片的联系区。详情页仍以清晰阅读为先，保留各项目的事实边界和页面锚点。
 
-## 视频素材
+视觉层主要在 `src/gallery.css`，由 `src/main.jsx` 最后导入。基础布局、旧版样式及组件样式仍在原文件，修改时需同时检查桌面与手机断点，避免只在某个尺寸被覆盖。
 
-`public/videos/hero-harbor.mp4` 由港口主题主视觉经本地 FFmpeg 制作，720p、24 fps、12 秒、H.264、无音轨。使用周期性缓慢缩放与平移，使循环接点平顺。属于视觉氛围素材，不代表真实项目拍摄经历。脚本：`scripts/create-hero-video.ps1`。
+## 导航与动态
 
-## 海外官网参考
+- 顶部导航固定并带虚化背景；手机端折叠菜单可用 Escape 关闭。
+- 首次进入同一会话有约 1.7 秒开屏；可点跳过或按键结束。
+- 首屏背景视频静音循环，提供播放/暂停按钮；作品卡视频只在进入视口且系统未要求减少动态时自动播放。
+- 系统“减少动态效果”设置会跳过开屏并抑制自动播放和装饰动画。
+- 五张作品卡打开独立 HTML 详情页。短剧六阶段目录保留可直达锚点，也兼容旧哈希路由、刷新和浏览器前进后退。
+- 开源参考可按全部、短剧与 AI 视频、AI Agent 筛选；链接通往原作者仓库。
 
-本轮参考南孚国际站公开页面的信息架构和节奏：黑白主色配单一信号色、悬浮导航、全屏首屏、全球信任指标、长期时间线和明确的联系入口。页面只借鉴这些设计语言，不复制南孚的文字、商标、图片或业务数据；本页的数字信号均来自本站已有页面结构，具体经历与成果仍以真实资料为准。
+## 内容与素材来源
 
-## 后续补充
+`public/images/hero-harbor.png` 由内置 ImageGen 生成，为黎明港口主题氛围图；`public/videos/hero-harbor.mp4` 由本地脚本 `scripts/create-hero-video.ps1` 制作成 12 秒、720p、无声循环视频。它们是站点设计素材，不作为个人项目实拍证据。
 
-- 完整 Skill 文档、执行说明、提示词与本地化模板。
-- 实际工具链与节点工作流。
-- 样片、真实项目记录及复盘数据。
-- 当前简历 PDF 保留原有 AI 项目方向版本，未修改个人履历或编造出海成绩。
+`public/images/global-sculpture.png` 为先前生成的金属地球主题图；`public/videos/global-intro.mp4` 是对应的视频素材。两者现在用于作品卡与 AI 视频能力相关位置。`public/videos/studio-sample.mp4` 使用本站素材，经 MoneyPrinterTurbo 本地流程制作并烧录中文字幕，是 12 秒、16:9 的制作流程样片，不能代表海外发布或市场效果。上游项目归原作者所有，MIT 许可保留在 `public/licenses/MoneyPrinterTurbo-LICENSE.txt`。
 
-## 主视觉
-
-- 文件：`public/images/hero-harbor.png`
-- 方式：内置 ImageGen 生成，1672 × 941 PNG；右侧为黎明港口、船舶与岸桥，左侧为深蓝色标题留白。
-- 用途：首页主题视觉，不作为个人项目实拍或成果证据。
-
-原有 `public/images/global-sculpture.png` 仍用于 AI 视频能力案例及样片展示；对应的 `global-intro.mp4` 仅作源文件归档。其原始生成提示词保留如下：
-
-最终提示词：
-
-Use case: stylized-concept
-Asset type: a premium editorial website hero image for a Chinese personal portfolio focused on global industry expansion, AI content, and project delivery.
-Primary request: Generate exactly one landscape 16:9 image of a monumental sculptural brushed silver globe formed from thin curved meridian metal ribbons.
-Scene/backdrop: a nearly black deep navy gallery background.
-Subject: sculptural silver globe with an elegant orbital arc sweeping behind the sphere, an understated metaphor for global expansion.
-Style/medium: sophisticated photorealistic 3D sculpture, precise industrial design, museum-quality art direction, premium modern editorial restraint.
-Composition/framing: landscape 16:9; globe centered slightly right with generous negative space on the left and enough safe cropping room around the sculpture.
-Lighting/mood: subtle crisp cobalt blue rim light, beautifully controlled soft highlights on silver, calm and confident.
-Color palette: deep navy, brushed silver, restrained cobalt blue; harmonizes with a white, navy, and silver website.
-Materials/textures: tactile sophisticated brushed metal.
-Constraints: no typography, no text, no logos, no watermark, no UI, no maps claiming geographic precision.
-Avoid: neon cyberpunk, stars, busy detail.
+`public/skills/short-drama-global/` 已包含六阶段 Skill、策划与本地化模板及制作质检清单。方法参考站内注明的公开项目，但文档为本站重新编写，没有复制其代码或工作流 JSON。海外语种成片、发行成果和客户案例仍待真实记录补充；已有简历 PDF 未改写个人履历。
