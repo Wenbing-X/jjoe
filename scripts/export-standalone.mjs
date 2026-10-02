@@ -24,8 +24,9 @@ const publicAssets = [
   ['images/hero-harbor.png', 'image/png'],
   ['videos/hero-harbor.mp4', 'video/mp4'],
   ['images/global-sculpture.png', 'image/png'],
+  ['images/short-drama-concept.png', 'image/png'],
+  ['images/content-ops-concept.png', 'image/png'],
   ['videos/studio-sample.mp4', 'video/mp4'],
-  ['videos/global-intro.mp4', 'video/mp4'],
 ];
 const embedded = await Promise.all(publicAssets.map(async ([name, mime]) => [
   name, `data:${mime};base64,${(await readFile(path.join(distRoot, name))).toString('base64')}`,
