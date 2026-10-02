@@ -25,6 +25,7 @@ const publicAssets = [
   ['videos/hero-harbor.mp4', 'video/mp4'],
   ['images/global-sculpture.png', 'image/png'],
   ['videos/studio-sample.mp4', 'video/mp4'],
+  ['videos/global-intro.mp4', 'video/mp4'],
 ];
 const embedded = await Promise.all(publicAssets.map(async ([name, mime]) => [
   name, `data:${mime};base64,${(await readFile(path.join(distRoot, name))).toString('base64')}`,
@@ -51,7 +52,10 @@ for (const prefix of ['./', '/']) {
 }
 // A Blob URL permits opening the embedded resume in a browser tab, unlike top-level data: navigation.
 embeddedScript = `const __offlineResume=URL.createObjectURL(new Blob([Uint8Array.from(atob("${resumeBase64}"),c=>c.charCodeAt(0))],{type:"application/pdf"}));\n` + embeddedScript;
-const styles = stylesheet.replace(/@import\s+url\([^;]+;?/g, '');
+let styles = stylesheet.replace(/@import\s+url\([^;]+;?/g, '');
+for (const [name, data] of embedded) {
+  styles = styles.replaceAll('/' + name, () => data);
+}
 function inlinePage(html, script, singleFile = false) {
   return html
     .replace('<html ', () => `<html data-navigation="${singleFile ? 'hash' : 'pages'}" data-home="${singleFile ? 'jjoe-preview.html' : 'index.html'}" `)
