@@ -4,6 +4,7 @@ import App from './App'
 import './styles.css'
 import './premium.css'
 import './editorial.css'
+import './gallery.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

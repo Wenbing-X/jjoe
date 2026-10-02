@@ -53,17 +53,17 @@ function Hero() {
     if (video.current?.paused) video.current.play().catch(() => setPlaying(false))
     else video.current?.pause()
   }
-  return <section className="hero" id="top" aria-labelledby="hero-title">
-    <img className="hero-image" src="/images/hero-harbor.png" width="1672" height="941" alt="" fetchPriority="high" />
-    <video ref={video} className="hero-video" src="/videos/hero-harbor.mp4" poster="/images/hero-harbor.png" muted loop playsInline preload="metadata" aria-hidden="true" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} />
-    <div className="hero-shade" />
-    <div className="shell hero-inner">
-      <div className="hero-topline"><span>INDEPENDENT THINKING. GLOBAL PERSPECTIVE.</span><span>个人作品与方法 / PORTFOLIO</span></div>
-      <div className="hero-composition">
-        <div className="hero-copy"><p className="hero-kicker"><span />产业出海 · AI 内容 · 项目交付</p><h1 id="hero-title">让价值，<br /><span>跨越边界。</span></h1><p className="hero-intro">我是谢文炳。我能将内容策划、AI 视频制作与项目方法<br className="desktop-break" />连接成清晰的出海工作路径。</p><div className="hero-actions"><Link className="button button-light" href="#projects">探索我的实践 <Arrow diagonal /></Link><Link className="hero-text-link" href="#/case/video-production">AI 视频制作能力 <Arrow /></Link></div></div>
-        <div className="hero-signature" aria-hidden="true"><span className="hero-orbit-label">A WIDER PERSPECTIVE</span><span className="hero-script">Beyond<br /><em>boundaries.</em></span><span className="hero-art-caption">LOCAL INSIGHT — GLOBAL AMBITION</span></div>
-      </div>
-      <div className="hero-bottom"><Link href="#projects"><span className="scroll-line" />向下探索</Link><span>BASED IN CHANGSHA · CONNECTED TO THE WORLD</span><button className="video-toggle" onClick={toggleVideo} aria-label={playing ? '暂停背景视频' : '播放背景视频'}><span aria-hidden="true">{playing ? 'Ⅱ' : '▷'}</span>{playing ? '暂停动态' : '播放动态'}</button></div>
+  return <section className="work-hero" id="top" aria-labelledby="hero-title">
+    <video ref={video} className="work-hero-video" src="/videos/hero-harbor.mp4" poster="/images/hero-harbor.png" muted loop playsInline preload="metadata" aria-hidden="true" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} />
+    <div className="work-hero-wash" aria-hidden="true" />
+    <div className="shell work-hero-inner">
+      <span className="work-backline">谢文炳 / 个人作品与方法</span>
+      <p className="work-eyebrow">Selected work · 产业出海方向</p>
+      <h1 className="work-title" id="hero-title">让想法走得<br /><span className="work-accent">更远一点。</span></h1>
+      <p className="work-intro">以市场洞察为起点，连接内容策划、AI 视频与项目交付。这里呈现我的实践、方法和正在探索的出海路径。</p>
+      <div className="work-hero-actions"><Link className="work-primary-link" href="#projects">浏览项目 <Arrow diagonal /></Link><Link className="work-secondary-link" href="#/projects/short-drama">查看短剧 Skill <Arrow /></Link></div>
+      <div className="work-proof"><span className="work-proof-dot" />独立实践 · 方法持续迭代</div>
+      <button className="work-video-toggle" onClick={toggleVideo} aria-label={playing ? '暂停背景视频' : '播放背景视频'}>{playing ? 'Ⅱ 暂停背景动态' : '▷ 播放背景动态'}</button>
     </div>
   </section>
 }
@@ -139,7 +139,7 @@ function Header({ route }) {
     <Link className="brand" href="#top" aria-label="谢文炳，返回首页"><span className="brand-mark">XW<span>·</span></span><span className="brand-name">谢文炳<small>GLOBAL PERSPECTIVE</small></span></Link>
     <button ref={menuButton} className="menu-toggle" aria-expanded={open} aria-controls="main-nav" aria-label={open ? '关闭导航' : '打开导航'} onClick={() => setOpen(!open)}>{open ? '关闭' : '菜单'} <span aria-hidden="true">{open ? '−' : '+'}</span></button>
     <nav id="main-nav" className={'nav ' + (open ? 'is-open' : '')} aria-label="主导航">
-      <Link href="#projects" aria-current={route.section === 'projects' || route.type === 'project' ? 'location' : undefined} onClick={() => setOpen(false)}>项目实践</Link><Link href="#/projects/short-drama" aria-current={route.id === 'short-drama' ? 'page' : undefined} onClick={() => setOpen(false)}>出海工作流</Link><Link href="#/case/video-production" aria-current={route.type === 'case' ? 'page' : undefined} onClick={() => setOpen(false)}>AI 视频制作</Link><Link href="#references" aria-current={route.section === 'references' ? 'location' : undefined} onClick={() => setOpen(false)}>开源参考</Link><Link href="#about" aria-current={route.section === 'about' ? 'location' : undefined} onClick={() => setOpen(false)}>关于我</Link><Link href="#capabilities" aria-current={route.section === 'capabilities' || route.type === 'capability' ? 'location' : undefined} onClick={() => setOpen(false)}>能力与方法</Link><Link className="nav-contact" href="#contact" onClick={() => setOpen(false)}>联系我</Link>
+      <Link href="#projects" aria-current={route.section === 'projects' || route.type === 'project' ? 'location' : undefined} onClick={() => setOpen(false)}>作品</Link><Link href="#/projects/short-drama" aria-current={route.id === 'short-drama' ? 'page' : undefined} onClick={() => setOpen(false)}>短剧 Skill</Link><Link href="#/case/video-production" aria-current={route.type === 'case' ? 'page' : undefined} onClick={() => setOpen(false)}>AI 视频</Link><Link href="#references" aria-current={route.section === 'references' ? 'location' : undefined} onClick={() => setOpen(false)}>开源参考</Link><Link href="#about" aria-current={route.section === 'about' ? 'location' : undefined} onClick={() => setOpen(false)}>关于我</Link><Link className="nav-contact" href="#contact" onClick={() => setOpen(false)}>联系我</Link>
     </nav><Link className="header-contact" href="#contact">联系我 <Arrow diagonal /></Link>
   </div></header>
 }
@@ -147,16 +147,53 @@ function Label({ number, children }) { return <div className="eyebrow"><span>{nu
 function SectionHead({ number, en, title, text }) {
   return <div className="section-head"><div><Label number={number}>{en}</Label><h2>{title}</h2></div>{text && <p>{text}</p>}</div>
 }
+const workItems = [
+  { id: 'short-drama', number: '01', category: 'SHORT DRAMA / SKILL', title: '短剧出海 Skill 工作流', summary: '从市场洞察到本地化与 AI 制作，一条可以继续复用的六阶段路径。', href: '#/projects/short-drama', video: '/videos/studio-sample.mp4', poster: '/images/global-sculpture.png' },
+  { id: 'video-production', number: '02', category: 'AI VIDEO / PRODUCTION', title: 'AI 视频制作能力', summary: '脚本、素材、字幕与剪辑连接为完整的本地制作流程。', href: '#/case/video-production', video: '/videos/global-intro.mp4', poster: '/images/hero-harbor.png' },
+  { id: 'comfyui', number: '03', category: 'GENERATIVE CONTENT', title: '生成式内容工作流', summary: projects[1].summary, href: '#/projects/comfyui', image: '/images/global-sculpture.png' },
+  { id: 'content', number: '04', category: 'CONTENT OPERATIONS', title: '内容运营与迭代', summary: projects[2].summary, href: '#/projects/content', image: '/images/hero-harbor.png' },
+  { id: 'business', number: '05', category: 'BUSINESS & DELIVERY', title: '经营决策与项目协同', summary: projects[3].summary, href: '#/projects/business' },
+]
+
+function WorkCard({ item }) {
+  const media = useRef(null)
+  useEffect(() => {
+    const video = media.current
+    if (!video) return
+    const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
+    let inView = false
+    const sync = () => {
+      if (preference.matches || !inView) video.pause()
+      else video.play().catch(() => {})
+    }
+    const observer = new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; sync() }, { threshold: .15 })
+    observer.observe(video)
+    preference.addEventListener('change', sync)
+    return () => { observer.disconnect(); preference.removeEventListener('change', sync) }
+  }, [item.video])
+  return <Link className="work-card" href={item.href} aria-label={'查看' + item.title}>
+    <div className={'work-media work-media--' + item.id}>
+      {item.video ? <video ref={media} src={item.video} poster={item.poster} muted loop playsInline preload="metadata" aria-hidden="true" /> : item.image ? <img src={item.image} alt="" loading="lazy" /> : <div className="work-business-art" aria-hidden="true"><span>IDEA</span><span>PLAN</span><span>DELIVER</span></div>}
+      <span className="work-media-overlay">进入项目 <Arrow diagonal /></span>
+    </div>
+    <div className="work-card-meta"><span>{item.category}</span><span className="work-card-index">{item.number} / 05</span></div>
+    <div className="work-card-title"><h3>{item.title}</h3><Arrow diagonal /></div>
+    <p className="work-card-summary">{item.summary}</p>
+  </Link>
+}
+
+function WorkGallery() {
+  return <section className="work-gallery" id="projects" aria-labelledby="projects-title"><div className="shell">
+    <div className="work-gallery-head"><p className="work-eyebrow">The selected work</p><h2 id="projects-title" className="work-section-title">实践，是方法的<span className="work-accent">证明。</span></h2><p>从短剧出海工作流到生成式内容与项目协同。每张作品都能进入独立页面，查看过程、边界与下一步。</p></div>
+    <div className="work-grid">{workItems.map(item => <WorkCard key={item.id} item={item} />)}</div>
+    <div className="work-gallery-note"><span>05 SELECTED PRACTICES</span><span>点击卡片查看详情 ↗</span></div>
+  </div></section>
+}
+
 function Home() {
   return <>
     <Hero />
-    <nav className="focus-strip" aria-label="探索方向"><div className="shell focus-strip-inner"><span className="focus-label">我的关注 / FOCUS</span><Link href="#/capabilities/planning"><span>01</span>产业与市场<Arrow diagonal /></Link><Link href="#/projects/short-drama"><span>02</span>内容与出海<Arrow diagonal /></Link><Link href="#/capabilities/workflow"><span>03</span>AI 与交付<Arrow diagonal /></Link></div></nav>
-    <section className="projects section" id="projects" aria-labelledby="projects-title"><div className="shell">
-      <SectionHead number="01" en="SELECTED PRACTICE" title={<span id="projects-title">从实践出发，向世界延伸。</span>} text="围绕产业出海，连接已有的内容制作、工作流搭建与项目运营经验。" />
-      <article className="featured-project"><div className="featured-copy"><div className="project-meta"><span>FEATURED PRACTICE / 01</span><span className="status-tag">方法已整理</span></div><Link href="#/projects/short-drama"><h3>短剧出海<br /><span>Skill 工作流</span></h3></Link><p>从市场洞察，到本地化与 AI 制作。<br />让一个故事，有走向更多市场的可能。</p><div className="tag-list"><span>内容出海</span><span>AI WORKFLOW</span><span>项目协同</span></div><Link className="featured-cta" href="#/projects/short-drama">探索完整流程 <span className="circle-arrow"><Arrow diagonal /></span></Link><span className="featured-note">六阶段方法 · 执行文档与模板可查看</span></div><div className="workflow-preview"><div className="workflow-preview-head"><span>THE STORY GOES FURTHER.</span><span>01—06</span></div><FilmStudy /><div className="workflow-preview-title" aria-hidden="true">One story.<br /><em>New horizons.</em></div><div className="flow-steps">{stages.map((stage,i) => <Link href={'#/projects/short-drama/' + stage.id} key={stage.id}><span>{String(i+1).padStart(2,'0')}</span><strong>{stage.short}</strong><Arrow diagonal /></Link>)}</div><div className="workflow-preview-foot"><span>INSIGHT → CREATION → ITERATION</span><span>点击阶段进入详情 ↗</span></div></div></article>
-      <div className="project-list">{projects.slice(1).map(project => <Link className="project-row" href={'#/projects/' + project.id} key={project.id}><span className="project-number">{project.number}</span><PracticeArt kind={project.id} /><div className="project-row-title"><span>{project.en}</span><h3>{project.title}</h3></div><p>{project.summary}</p><span className="project-category">{project.category}</span><span className="project-row-arrow"><Arrow diagonal /></span></Link>)}</div>
-      <Link className="lab-entry" href="#playground"><span><small>TRY IT</small>动手试试：出海互动实验</span><Arrow diagonal /></Link>
-    </div></section>
+    <WorkGallery />
     <VideoCapabilityEntry />
     <InteractionLab />
     <ReferenceLibrary />
@@ -200,7 +237,11 @@ function MissingPage() {
 }
 
 function Contact() {
-  return <section className="contact" id="contact" aria-labelledby="contact-title"><div className="shell"><div className="contact-top"><div><p className="eyebrow">LET’S CONNECT</p><h2 id="contact-title">下一站，<br /><span>一起走向更大的市场。</span></h2></div><div className="contact-copy"><p>期待产业出海、AI 内容与项目协同方向的机会。<br />欢迎交流具体想法与合作需求。</p><Link className="contact-email" href={'mailto:' + EMAIL}>{EMAIL}<Arrow diagonal /></Link></div></div><footer className="footer"><Link className="brand-mark" href="#top" aria-label="返回首页">XW<span>·</span></Link><span>© {new Date().getFullYear()} 谢文炳</span><span>CHANGSHA, CHINA</span><Link href="#top">回到顶部 ↑</Link></footer></div></section>
+  return <section className="contact" id="contact" aria-labelledby="contact-title">
+    <div className="shell"><div className="work-cta"><div className="work-cta-content"><p className="work-eyebrow">LET'S CONNECT / 下一步</p><h2 id="contact-title">让下一段旅程，<br /><span className="work-accent">从这里开始。</span></h2><p>期待产业出海、AI 内容与项目协同方向的机会。欢迎带着具体问题，一起交流更清晰的做法。</p><Link className="work-primary-link" href={'mailto:' + EMAIL}>发送邮件 <Arrow diagonal /></Link></div></div>
+      <footer className="footer"><div className="footer-top"><div><Link className="footer-brand" href="#top">谢文炳 <span>/ XIE WENBING</span></Link><p>产业出海 · AI 内容 · 项目交付</p></div><div className="footer-links"><span>SITEMAP</span><Link href="#projects">项目实践</Link><Link href="#/projects/short-drama">短剧 Skill</Link><Link href="#about">关于我</Link><Link href="#contact">联系我</Link></div><div className="footer-links"><span>CONTACT</span><Link href={'mailto:' + EMAIL}>{EMAIL}</Link><span>CHANGSHA, CHINA</span></div></div><div className="footer-wordmark" aria-hidden="true">XIE WENBING</div><div className="footer-bottom"><span>© {new Date().getFullYear()} 谢文炳</span><span>BASED IN CHANGSHA · CONNECTED TO THE WORLD</span><Link href="#top">回到顶部 ↑</Link></div></footer>
+    </div>
+  </section>
 }
 export default function App({ initialHash }) {
   const [route, setRoute] = useState(() => initialHash !== undefined ? parseHash(initialHash) : parseLocation(typeof window === 'undefined' ? undefined : window.location))
