@@ -148,10 +148,10 @@ function SectionHead({ number, en, title, text }) {
   return <div className="section-head"><div><Label number={number}>{en}</Label><h2>{title}</h2></div>{text && <p>{text}</p>}</div>
 }
 const workItems = [
-  { id: 'short-drama', number: '01', category: 'SHORT DRAMA / SKILL', title: '短剧出海 Skill 工作流', summary: '从市场洞察到本地化与 AI 制作，一条可以继续复用的六阶段路径。', href: '#/projects/short-drama', video: '/videos/studio-sample.mp4', poster: '/images/global-sculpture.png' },
-  { id: 'video-production', number: '02', category: 'AI VIDEO / PRODUCTION', title: 'AI 视频制作能力', summary: '脚本、素材、字幕与剪辑连接为完整的本地制作流程。', href: '#/case/video-production', video: '/videos/global-intro.mp4', poster: '/images/hero-harbor.png' },
+  { id: 'short-drama', number: '01', category: 'SHORT DRAMA / SKILL', title: '短剧出海 Skill 工作流', summary: '从市场洞察到本地化与 AI 制作，一条可以继续复用的六阶段路径。', href: '#/projects/short-drama', image: '/images/short-drama-concept.png' },
+  { id: 'video-production', number: '02', category: 'AI VIDEO / PRODUCTION', title: 'AI 视频制作能力', summary: '脚本、素材、字幕与剪辑连接为完整的本地制作流程。', href: '#/case/video-production', video: '/videos/hero-harbor.mp4', poster: '/images/hero-harbor.png' },
   { id: 'comfyui', number: '03', category: 'GENERATIVE CONTENT', title: '生成式内容工作流', summary: projects[1].summary, href: '#/projects/comfyui', image: '/images/global-sculpture.png' },
-  { id: 'content', number: '04', category: 'CONTENT OPERATIONS', title: '内容运营与迭代', summary: projects[2].summary, href: '#/projects/content', image: '/images/hero-harbor.png' },
+  { id: 'content', number: '04', category: 'CONTENT OPERATIONS', title: '内容运营与迭代', summary: projects[2].summary, href: '#/projects/content', image: '/images/content-ops-concept.png' },
   { id: 'business', number: '05', category: 'BUSINESS & DELIVERY', title: '经营决策与项目协同', summary: projects[3].summary, href: '#/projects/business' },
 ]
 
