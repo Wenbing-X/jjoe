@@ -1,6 +1,6 @@
 # AI 短剧制作与交付检查清单
 
-这份清单把故事、镜头、画面、声音与成片连接成可审阅的制作链路。它是方法文档，不表示下列开源工具已全部接入本站或已有海外发行成果。先读[短剧出海 Skill](./SKILL.md)，需要表单时使用[工作模板](./templates.md)。
+这份清单把故事、镜头、画面、声音与成片连接成可审阅的制作链路，明确工具交接、版本管理和交付检查标准。先读[短剧出海 Skill](./SKILL.md)，需要表单时使用[工作模板](./templates.md)。
 
 ## 工具与交接
 
@@ -10,7 +10,7 @@
 4. **声音与合成**：按镜头表组织配音、音效、音乐、字幕和剪辑；需保留授权与来源。可按项目选择剪映、FFmpeg 或其他适合的工具，不预设必须使用某一套自动化脚本。
 5. **导出与发布**：以目标渠道当时的官方要求核对技术规格，再人工通看最终文件。将母版、渠道版、字幕、封面、发布文案和权利记录一起交付。
 
-GitHub 参考：[AI Director Skills](https://github.com/hzw1199/AI-Director-Skills) 展示故事诊断、镜头表、角色锚点与本地生成的衔接；[Story Claw](https://github.com/ZC89757/story-claw) 展示长故事拆解为短剧集的流程；[ComfyUI Workflows](https://github.com/w993322800/comfyui_workflows) 展示定妆、分镜、视频、TTS 和合成的模块分工。本文只借鉴流程设计，未复制其代码或工作流文件。
+GitHub 参考：[AI Director Skills](https://github.com/hzw1199/AI-Director-Skills) 展示故事诊断、镜头表、角色锚点与本地生成的衔接；[Story Claw](https://github.com/ZC89757/story-claw) 展示长故事拆解为短剧集的流程；[ComfyUI Workflows](https://github.com/w993322800/comfyui_workflows) 展示定妆、分镜、视频、TTS 和合成的模块分工。以上为流程设计参考，各项目权利归原作者。
 
 ## 建议的项目目录
 
