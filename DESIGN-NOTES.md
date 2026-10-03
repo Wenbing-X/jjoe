@@ -23,7 +23,7 @@
 
 `public/images/short-drama-concept.png` 与 `public/images/content-ops-concept.png` 是为本轮画廊生成的概念封面，不代表项目实拍或海外成果；对应提示分别描述电影棚里的多市场故事入口，以及内容策划工作台，均要求无文字、标志和可识别人物。`public/images/global-sculpture.png` 为先前生成的金属地球主题图；`public/videos/global-intro.mp4` 保留为源素材。`public/videos/studio-sample.mp4` 使用本站素材，经 MoneyPrinterTurbo 本地流程制作并烧录中文字幕，是 12 秒、16:9 的制作流程样片，不能代表海外发布或市场效果。上游项目归原作者所有，MIT 许可保留在 `public/licenses/MoneyPrinterTurbo-LICENSE.txt`。
 
-`public/skills/short-drama-global/` 已包含六阶段 Skill、策划与本地化模板及制作质检清单。方法参考站内注明的公开项目，但文档为本站重新编写，没有复制其代码或工作流 JSON。海外语种成片、发行成果和客户案例仍待真实记录补充；已有简历 PDF 未改写个人履历。
+`public/skills/short-drama-global/` 已包含六阶段 Skill、策划与本地化模板及制作质检清单。方法参考站内注明的公开项目，但文档为本站重新编写，没有复制其代码或工作流 JSON。页面使用已有成熟案例、现有样片与可核对的项目记录；已有简历 PDF 未改写个人履历。
 
 ### 本轮概念封面提示词
 
