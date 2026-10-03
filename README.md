@@ -47,7 +47,7 @@ AI 视频能力案例：`case-video-production.html`；旧地址 `tool-video-stu
 - `public/videos/studio-sample.mp4`：使用本站素材，经 MoneyPrinterTurbo 本地剪辑并烧录中文字幕的 12 秒流程试制样片；不是海外发行案例。
 - `public/谢文炳_AI项目经理_优化简历.pdf`：保留的原版简历。
 
-短剧出海 Skill 提供六阶段执行方法和模板；具体海外发布成效、语种成片与客户案例仍需真实项目记录。开源参考区的九个 GitHub 项目明确标注为**外部研究参考**，权利归各作者，不能视为本站作者的个人成果。MoneyPrinterTurbo 的上游代码与 API 未接入本站；其[原仓库](https://github.com/harry0703/MoneyPrinterTurbo)和 MIT 许可分别见外链及 `public/licenses/MoneyPrinterTurbo-LICENSE.txt`。更多设计与素材说明见 [DESIGN-NOTES.md](DESIGN-NOTES.md)。
+短剧出海 Skill 提供六阶段执行方法和模板，页面集中展示已有成熟案例、原创方法与可复用的执行资料。开源参考区的九个 GitHub 项目明确标注为**外部研究参考**，权利归各作者，不能视为本站作者的个人成果。MoneyPrinterTurbo 的上游代码与 API 未接入本站；其[原仓库](https://github.com/harry0703/MoneyPrinterTurbo)和 MIT 许可分别见外链及 `public/licenses/MoneyPrinterTurbo-LICENSE.txt`。更多设计与素材说明见 [DESIGN-NOTES.md](DESIGN-NOTES.md)。
 
 ## 部署
 
