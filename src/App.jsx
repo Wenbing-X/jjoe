@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { projects, stages, capabilities, referenceProjects, agentReferences } from './content'
-import { parseHash, parseLocation, hrefFor, routeTitle } from './navigation'
+import { parseHash, parseLocation, hrefFor } from './navigation'
+import { updatePageMetadata } from './seo'
 import InteractionLab from './components/InteractionLab'
 import SiteEffects from './components/SiteEffects'
 import VideoCapability, { VideoCapabilityEntry } from './components/VideoCapability'
@@ -254,7 +255,7 @@ export default function App({ initialHash }) {
     return () => { window.removeEventListener('hashchange', update); window.removeEventListener('popstate', update) }
   }, [])
   useEffect(() => {
-    document.title = routeTitle(route)
+    updatePageMetadata(route)
     const changedPage = previousPage.current !== pageKey
     previousPage.current = pageKey
     const frame = requestAnimationFrame(() => {

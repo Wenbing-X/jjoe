@@ -35,7 +35,6 @@ export function parseLocation(locationLike = typeof window === 'undefined' ? {} 
 
 export function hrefFor(hash) {
   if (typeof hash !== 'string' || !hash.startsWith('#') || hash === '#main') return hash
-  if (typeof document === 'undefined') return hash
   const root = typeof document === 'undefined' ? null : document.documentElement
   if (root?.dataset.navigation === 'hash') return hash
   const route = parseHash(hash)

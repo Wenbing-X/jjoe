@@ -8,6 +8,8 @@ React + Vite 个人网站，展示产业出海方向的内容策划、AI 视频�
 pnpm install --frozen-lockfile
 pnpm dev
 pnpm build
+node scripts/test-seo.mjs
+node scripts/export-standalone.mjs
 node scripts/test-pages.mjs
 ```
 
@@ -48,5 +50,11 @@ AI 视频能力案例：`case-video-production.html`；旧地址 `tool-video-stu
 短剧出海 Skill 提供六阶段执行方法和模板；具体海外发布成效、语种成片与客户案例仍需真实项目记录。开源参考区的九个 GitHub 项目明确标注为**外部研究参考**，权利归各作者，不能视为本站作者的个人成果。MoneyPrinterTurbo 的上游代码与 API 未接入本站；其[原仓库](https://github.com/harry0703/MoneyPrinterTurbo)和 MIT 许可分别见外链及 `public/licenses/MoneyPrinterTurbo-LICENSE.txt`。更多设计与素材说明见 [DESIGN-NOTES.md](DESIGN-NOTES.md)。
 
 ## 部署
+
+构建时通过 React 预渲染全部 11 个页面，正文和详情链接直接存在于 HTML 中；浏览器再启动原有交互和动画。`src/seo.js` 统一管理每页标题、描述、canonical、分享信息与人物/网页结构化数据。构建还会输出 `robots.txt` 和含 10 个正式网址的 `sitemap.xml`，旧视频入口使用正式案例页的 canonical，不重复列入地图。
+
+更换正式域名时先修改 `src/seo.js` 的 `siteUrl`，重新构建并配置旧域名跳转。搜索资源平台的验证文件或验证标签必须使用站长账号实际提供的值；不要填写假验证码。部署后在百度搜索资源平台、Google Search Console 或 Bing Webmaster Tools 验证网站并提交站点地图。搜索引擎决定是否及何时收录；这些设置不承诺排名。
+
+离线预览继续采用原有客户端渲染，以保留单文件素材嵌入和旧 hash 导航；正式发布使用 `dist`，不发布离线预览作为正式首页。
 
 GitHub `main` 分支部署至 Render 静态站点。构建命令：`pnpm install --frozen-lockfile; pnpm run build`；发布目录：`dist`。

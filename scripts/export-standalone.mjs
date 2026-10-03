@@ -59,6 +59,9 @@ for (const [name, data] of embedded) {
 }
 function inlinePage(html, script, singleFile = false) {
   return html
+    // Offline previews keep their existing JS navigation and embedded asset handling.
+    .replace(/<!--prerender:start-->[\s\S]*?<!--prerender:end-->/g, '')
+    .replace(/\s*<script id="site-schema" type="application\/ld\+json">[\s\S]*?<\/script>/g, '')
     .replace('<html ', () => `<html data-navigation="${singleFile ? 'hash' : 'pages'}" data-home="${singleFile ? 'jjoe-preview.html' : 'index.html'}" `)
     .replace(/\s*<link\s+rel="preconnect"[^>]*>/gs, '')
     .replace(/\s*<link\s+rel="stylesheet"\s+href="https:\/\/fonts\.googleapis\.com[^>]*>/gs, '')

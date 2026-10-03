@@ -56,7 +56,7 @@ document.documentElement.dataset.navigation = 'hash';
 assert.equal(hrefFor('#/projects/short-drama'), '#/projects/short-drama');
 assert.equal(hrefFor('#projects'), '#projects');
 delete globalThis.document;
-assert.equal(hrefFor('#/projects/short-drama'), '#/projects/short-drama');
+assert.equal(hrefFor('#/projects/short-drama'), './project-short-drama.html');
 
 const singleFile = await readFile(path.join(outputs, 'jjoe-preview.html'), 'utf8');
 const previewIndex = await readFile(path.join(folder, 'index.html'), 'utf8');
