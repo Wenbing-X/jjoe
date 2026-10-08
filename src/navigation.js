@@ -46,5 +46,5 @@ export function hrefFor(hash) {
 export function routeTitle(route) {
   if (route.type === 'case' && route.id === 'video-production') return 'AI 视频制作能力 — 谢文炳'
   const item = route.type === 'project' ? projects.find(p => p.id === route.id) : route.type === 'capability' ? capabilities.find(c => c.id === route.id) : null
-  return item ? item.title + ' — 谢文炳' : route.type === 'missing' ? '内容未找到 — 谢文炳' : '谢文炳 — 产业出海 · AI 内容 · 项目交付'
+  return item ? item.title + ' — 谢文炳' : route.type === 'missing' ? '内容未找到 — 谢文炳' : '谢文炳 · 让想法走得更远'
 }

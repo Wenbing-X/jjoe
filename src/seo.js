@@ -2,7 +2,7 @@ import { projects, capabilities } from './content.js'
 import { parseHash, routeTitle } from './navigation.js'
 
 export const siteUrl = 'https://jjoe.onrender.com'
-const homeDescription = '谢文炳的个人作品集，展示产业出海、短剧内容、AI 视频制作、生成式工作流与项目协同能力。'
+const homeDescription = '谢文炳的个人作品与方法。连接产业出海、AI 内容制作与项目交付。'
 const videoDescription = '谢文炳的 AI 视频制作实践：连接脚本、素材、字幕、配音与剪辑，展示本地制作流程和 12 秒试制样片。'
 
 export const searchPages = [
