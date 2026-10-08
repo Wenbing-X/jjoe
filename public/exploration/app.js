@@ -10,9 +10,13 @@ const projects = [
 const legacyPages = {
   '#/case/video-production': 'case-video-production.html',
   '#/tools/video-studio': 'case-video-production.html',
-  ...Object.fromEntries(projects.filter(project => project.url.startsWith('project-')).map(project => ['#/projects/' + project.url.slice(8, -5), project.url])),
-  ...Object.fromEntries(['planning', 'localization', 'workflow', 'delivery'].map(id => ['#/capabilities/' + id, 'capability-' + id + '.html'])),
 };
+projects.filter(project => project.url.startsWith('project-')).forEach(project => {
+  legacyPages['#/projects/' + project.url.slice(8, -5)] = project.url;
+});
+['planning', 'localization', 'workflow', 'delivery'].forEach(id => {
+  legacyPages['#/capabilities/' + id] = 'capability-' + id + '.html';
+});
 const routeLegacyHash = () => {
   const hash = location.hash;
   const base = hash.split('/').slice(0, 3).join('/');
@@ -28,13 +32,18 @@ const dialog = document.querySelector('#project-dialog');
 let lastTrigger;
 document.querySelectorAll('[data-project]').forEach(button => button.addEventListener('click', () => {
   const project = projects[Number(button.dataset.project)];
+  // Older embedded browsers can still open every project without a native dialog.
+  if (typeof dialog.showModal !== 'function') {
+    location.href = './' + project.url;
+    return;
+  }
   lastTrigger = button;
   document.querySelector('#dialog-title').textContent = project.title;
   document.querySelector('#dialog-category').textContent = project.category;
   document.querySelector('#dialog-text').textContent = project.text;
   document.querySelector('#dialog-link').href = './' + project.url;
   const media = document.querySelector('#dialog-media');
-  media.replaceChildren();
+  media.textContent = '';
   if (project.video) {
     const video = document.createElement('video');
     video.src = project.video;
@@ -43,18 +52,20 @@ document.querySelectorAll('[data-project]').forEach(button => button.addEventLis
     video.playsInline = true;
     video.preload = 'metadata';
     video.setAttribute('aria-label', '港口影像展示');
-    media.append(video);
+    media.appendChild(video);
   } else if (project.image) {
     const image = document.createElement('img');
     image.src = './images/' + project.image;
     image.alt = project.title;
-    media.append(image);
+    media.appendChild(image);
   }
-  document.querySelector('#dialog-tags').replaceChildren(...project.tags.map(tag => {
+  const tags = document.querySelector('#dialog-tags');
+  tags.textContent = '';
+  project.tags.forEach(tag => {
     const label = document.createElement('span');
     label.textContent = tag;
-    return label;
-  }));
+    tags.appendChild(label);
+  });
   document.body.classList.add('modal-open');
   dialog.showModal();
 }));
@@ -65,9 +76,10 @@ dialog.addEventListener('click', event => {
   if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
 });
 dialog.addEventListener('close', () => {
-  document.querySelector('#dialog-media video')?.pause();
+  const video = document.querySelector('#dialog-media video');
+  if (video) video.pause();
   document.body.classList.remove('modal-open');
-  lastTrigger?.focus();
+  if (lastTrigger) lastTrigger.focus();
 });
 
 document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => {

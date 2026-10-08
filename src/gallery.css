@@ -437,6 +437,10 @@ a:focus-visible, button:focus-visible { outline: 2px solid #d6ac74; outline-offs
 .detail-sidebar { border-color: #c8c0b6; }
 .detail-sidebar nav a { border-color: #d8d1c7; }
 .detail-sidebar nav a:hover, .detail-sidebar nav a[aria-current] { background: #e7ded1; color: #785639; border-left-color: #ad875c; }
+.detail-layout > *, .detail-heading > div, .detail-meta > div,
+.stage-heading > div, .stage-io > div, .story-section > *,
+.related-project > span, .skill-resource > * { min-width: 0; }
+.detail-content { overflow-wrap: break-word; }
 .stage-number { color: #aa8966; }
 .stage-label, .stage-io dt, .notice-label { color: #92714f; }
 .workflow-notice, .stage-io, .related-project, .detail-note { background: #e8e2d8; }
@@ -481,6 +485,15 @@ a:focus-visible, button:focus-visible { outline: 2px solid #d6ac74; outline-offs
   .header .nav > a:hover, .header .nav > a[aria-current] { background: #ffffff12; border-radius: 9px; }
   .header .nav .nav-contact { display: block; color: #e6c99f; }
   .header-contact { display: none; }
+  /* Keep reading pages full-width when the compact navigation is active. */
+  .detail-layout { display: block; padding-block: 40px; }
+  .detail-sidebar { position: static; max-height: none; overflow: visible; padding-right: 0; margin-bottom: 40px; }
+  .detail-sidebar nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 18px; }
+  .detail-sidebar nav a { min-width: 0; }
+  .detail-content { width: 100%; max-width: none; }
+  .story-section { display: block; padding-block: 34px; }
+  .story-section .stage-label { display: block; padding-top: 0; margin-bottom: 12px; }
+  .story-section p { max-width: none; }
 }
 @media (max-width: 760px) {
   :root { --shell: calc(100% - 40px); }
@@ -512,6 +525,8 @@ a:focus-visible, button:focus-visible { outline: 2px solid #d6ac74; outline-offs
   .references-head h2 { font-size: 36px; }
   .vc-entry-copy { padding-top: 74px; }
   .detail-hero { background: #111113; }
+  .detail-sidebar nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+  .stage-io, .stage-gate, .skill-resource-grid { grid-template-columns: minmax(0, 1fr); }
   .contact { padding-top: 20px; }
   .contact .work-cta { min-height: 520px; padding: 40px 28px; }
   .contact .work-cta-content h2 { font-size: clamp(43px, 9vw, 65px); }

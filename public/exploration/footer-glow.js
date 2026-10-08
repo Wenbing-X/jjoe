@@ -29,7 +29,8 @@ if (signature) {
   signature.addEventListener('pointermove', track, { passive: true });
   signature.addEventListener('pointerleave', clear);
   signature.addEventListener('pointercancel', clear);
-  hoverPointer.addEventListener('change', clear);
+  if (hoverPointer.addEventListener) hoverPointer.addEventListener('change', clear);
+  else if (hoverPointer.addListener) hoverPointer.addListener(clear);
   window.addEventListener('blur', clear);
   document.addEventListener('visibilitychange', () => { if (document.hidden) clear(); });
 }

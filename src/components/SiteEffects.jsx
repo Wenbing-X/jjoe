@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { listenToMediaQuery } from '../media-query'
 
 export default function SiteEffects({ pageKey }) {
   const progress = useRef(null)
@@ -57,8 +58,8 @@ export default function SiteEffects({ pageKey }) {
     document.addEventListener('pointermove', move, { passive:true })
     document.addEventListener('pointerleave', clear)
     window.addEventListener('blur', clear)
-    preference.addEventListener('change', clear)
-    return () => { clear(); document.removeEventListener('pointermove', move); document.removeEventListener('pointerleave', clear); window.removeEventListener('blur', clear); preference.removeEventListener('change', clear) }
+    const stopListening = listenToMediaQuery(preference, clear)
+    return () => { clear(); document.removeEventListener('pointermove', move); document.removeEventListener('pointerleave', clear); window.removeEventListener('blur', clear); stopListening() }
   }, [pageKey])
 
   const goTop = () => {

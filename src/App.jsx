@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { projects, stages, capabilities, referenceProjects, agentReferences } from './content'
 import { parseHash, parseLocation, hrefFor } from './navigation'
 import { updatePageMetadata } from './seo'
+import { listenToMediaQuery } from './media-query'
 import InteractionLab from './components/InteractionLab'
 import SiteEffects from './components/SiteEffects'
 import VideoCapability, { VideoCapabilityEntry } from './components/VideoCapability'
@@ -47,8 +48,7 @@ function Hero() {
       else video.current?.play().catch(() => setPlaying(false))
     }
     sync()
-    preference.addEventListener('change', sync)
-    return () => preference.removeEventListener('change', sync)
+    return listenToMediaQuery(preference, sync)
   }, [])
   const toggleVideo = () => {
     if (video.current?.paused) video.current.play().catch(() => setPlaying(false))
@@ -169,8 +169,8 @@ function WorkCard({ item }) {
     }
     const observer = new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; sync() }, { threshold: .15 })
     observer.observe(video)
-    preference.addEventListener('change', sync)
-    return () => { observer.disconnect(); preference.removeEventListener('change', sync) }
+    const stopListening = listenToMediaQuery(preference, sync)
+    return () => { observer.disconnect(); stopListening() }
   }, [item.video])
   return <Link className="work-card" href={item.href} aria-label={'查看' + item.title}>
     <div className={'work-media work-media--' + item.id}>
